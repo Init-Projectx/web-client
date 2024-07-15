@@ -1,113 +1,154 @@
+"use client";
+
+import Hero from "@/components/layout/hero";
+import CardCategory from "@/components/ui/CardCategory";
+import CardProduct from "@/components/ui/CardProduct";
+import Modal from "@/components/ui/Modal";
+import Pagination from "@/components/ui/Pagination";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Dropdown from "@/components/ui/Dropdown";
+import Form from "@/components/ui/Form";
+import Input from "@/components/ui/Input";
+import FileUpload from "@/components/ui/FileUpload";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import fashion from "@/assets/images/fashion.png";
+import food from "@/assets/images/food.png";
+import healthy from "@/assets/images/healthy.png";
+import feeding from "@/assets/images/feeding.png";
+import equipment from "@/assets/images/equipment.png";
+import toys from "@/assets/images/toys.png";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [pageCount, setPageCount] = useState(10);
+  const [categories, setCategories] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulasikan pemuatan data
+    setTimeout(() => {
+      setProducts([
+        {
+          id: 1,
+          name: "Product 1",
+          description: "Description 1",
+          image: "/path/to/image1.jpg",
+          price: 100,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/path/to/image2.jpg",
+          price: 200,
+        },
+      ]);
+      setCategories([
+        { name: "fashion", image: fashion },
+        { name: "food", image: food },
+        { name: "healthy", image: healthy },
+        { name: "toys", image: toys },
+        { name: "feeding", image: feeding },
+        { name: "image", image: equipment },
+      ]);
+      setLoading(false);
+    }, 2000); // Simulasikan waktu pemuatan
+  }, []);
+
+  const handlePageChange = (selectedItem) => {
+    // Logika untuk perubahan halaman
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    // Logika untuk perubahan kategori
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted with data:", formData);
+  };
+
+  const handleFileDrop = (acceptedFiles) => {
+    console.log("Files uploaded:", acceptedFiles);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex flex-col md:px-24 px-10 py-[5.5rem]">
+      <Head>
+        <title>MiniMiracle</title>
+      </Head>
+      {loading ? (
+        <LoadingSpinner size="large" color="blue" className="mt-8" />
+      ) : (
+        <>
+          <Hero />
+          <div>
+            <div className="bg-primaryColor flex gap-5 border rounded-md border-color-gray-300 shadow-md mb-8 mt-14 px-5 pt-8 pb-10">
+              <h3 className="text-xl font-bold text-color-dark">
+                Browse By Category
+              </h3>
+            </div>
+            {/* <Dropdown
+            options={categories.map((cat) => cat.name)}
+            onChange={handleCategoryChange}
+            className="mb-4"
+          /> */}
+            <div className="product-list grid lg:grid-cols-6 gap-6 mt-8">
+              {categories.map((category) => (
+                <CardCategory key={category.name} category={category} />
+              ))}
+            </div>
+          </div>
+          <div className="product-list grid lg:grid-cols-4 gap-6 mt-8">
+            {products.map((product) => (
+              <CardProduct key={product.id} product={product} />
+            ))}
+          </div>
+          <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+          <Button
+            className="mt-4 bg-blue-500 text-white rounded"
+            onClick={() => setIsModalOpen(true)}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+            Open Modal
+          </Button>
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+            <Form onSubmit={handleFormSubmit} className="space-y-4">
+              <Input
+                label="Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+              />
+              <Input
+                label="Email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+              />
+              <FileUpload onDrop={handleFileDrop} className="mt-4" />
+              <Button
+                type="submit"
+                className="mt-4 bg-green-500 text-white rounded"
+              >
+                Submit
+              </Button>
+            </Form>
+          </Modal>
+        </>
+      )}
+    </div>
   );
 }
