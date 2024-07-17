@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Modal from "react-modal";
+import axios from "axios";
 
 export default function Navbar() {
   const [cartItems, setCartItems] = useState(0);
@@ -22,12 +23,24 @@ export default function Navbar() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    closeModal();
+
+    try {
+      const response = await axios.post('http://localhost:8080/v1/api/auth/login', {
+        email,
+        password
+      });
+
+      if (response.status === 200) {
+        console.log('Login Success:', response.data);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        alert('Login Success');
+        closeModal();
+      }
+    } catch (error) {
+      console.error('Login Failed:', error.response ? error.response.data : error.message);
+    }
   };
 
   return (
