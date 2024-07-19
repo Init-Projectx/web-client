@@ -3,7 +3,6 @@
 import Input from "@/components/ui/Input";
 import styles from "./userProfile.module.css"
 import FileUpload from "@/components/ui/FileUpload";
-import Button from "@/components/ui/Button";
 
 
 const ManualPayment = () => {
