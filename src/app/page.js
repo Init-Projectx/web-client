@@ -15,6 +15,8 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { getUser } from "@/modules/fetch/fetchUser"
+import { findOneCart } from "@/modules/fetch/fetchCart";
 import fashion from "@/assets/images/fashion.png";
 import food from "@/assets/images/food.png";
 import healthy from "@/assets/images/healthy.png";
@@ -23,6 +25,7 @@ import equipment from "@/assets/images/equipment.png";
 import toys from "@/assets/images/toys.png";
 
 export default function Home() {
+  const [userId, setUserId] = useState(null);
   const [products, setProducts] = useState([]);
   const [pageCount, setPageCount] = useState(10);
   const [categories, setCategories] = useState([]);
@@ -32,6 +35,115 @@ export default function Home() {
     name: "",
     email: "",
   });
+  
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const getUserId = decodedToken.id;
+        try {
+          const userData = await getUser(getUserId);
+          setUserId(userData.id);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      const fetchCartData = async () => {
+        try {
+          const cartData = await findOneCart(userId);
+          setCart(cartData?.data);
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+
+      fetchCartData();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    // Simulasikan pemuatan data
+    setTimeout(() => {
+      setProducts([
+        {
+          id: 1,
+          name: "Product 1",
+          description: "Description 1",
+          image: "/assets/images/baju-anak.jpg",
+          price: 100,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/assets/images/baju-anak.jpg",
+          price: 200,
+        },
+        {
+          id: 3,
+          name: "Product 3",
+          description: "Description 3",
+          image: "/assets/images/baju-anak.jpg",
+          price: 200,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/assets/images/baju-anak.jpg",
+          price: 200,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/assets/images/baju-anak.jpg",
+          price: 200,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/assets/images/baju-anak.jpg",
+          price: 200,
+        },
+      ]);
+      setCategories([
+        { name: "fashion", image: fashion },
+        { name: "food", image: food },
+        { name: "healthy", image: healthy },
+        { name: "toys", image: toys },
+        { name: "feeding", image: feeding },
+        { name: "image", image: equipment },
+      ]);
+      setLoading(false);
+    }, 2000); // Simulasikan waktu pemuatan
+  }, []);
+
+  const handlePageChange = (selectedItem) => {
+    // Logika untuk perubahan halaman
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    // Logika untuk perubahan kategori
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted with data:", formData);
+  };
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -116,11 +228,14 @@ export default function Home() {
             ))}
           </div>
           <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
+          {/* <Button
           <Button
             className="mt-4 bg-blue-500 text-white rounded"
             onClick={() => setIsModalOpen(true)}
           >
             Open Modal
+          </Button> */}
+          {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           </Button>
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <Form onSubmit={handleFormSubmit} className="space-y-4">
@@ -146,6 +261,7 @@ export default function Home() {
                 Submit
               </Button>
             </Form>
+          </Modal> */}
           </Modal>
         </>
       )}
