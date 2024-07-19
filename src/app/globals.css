@@ -49,6 +49,12 @@
   z-index: 1000;
 }
 
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
 .poppins-bold {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
