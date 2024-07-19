@@ -34,7 +34,7 @@ export default function Navbar() {
 
       if (response.status === 200) {
         console.log('Login Success:', response.data);
-        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('token', response.data.accessToken);
         alert('Login Success');
         closeModal();
       }
