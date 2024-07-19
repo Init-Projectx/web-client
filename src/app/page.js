@@ -6,6 +6,8 @@ import CardProduct from "@/components/ui/CardProduct";
 import Modal from "@/components/ui/Modal";
 import Pagination from "@/components/ui/Pagination";
 import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Dropdown from "@/components/ui/Dropdown";
 import Form from "@/components/ui/Form";
 import Input from "@/components/ui/Input";
 import FileUpload from "@/components/ui/FileUpload";
@@ -33,6 +35,7 @@ export default function Home() {
     name: "",
     email: "",
   });
+  
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
@@ -141,6 +144,53 @@ export default function Home() {
     console.log("Form submitted with data:", formData);
   };
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulasikan pemuatan data
+    setTimeout(() => {
+      setProducts([
+        {
+          id: 1,
+          name: "Product 1",
+          description: "Description 1",
+          image: "/path/to/image1.jpg",
+          price: 100,
+        },
+        {
+          id: 2,
+          name: "Product 2",
+          description: "Description 2",
+          image: "/path/to/image2.jpg",
+          price: 200,
+        },
+      ]);
+      setCategories([
+        { name: "fashion", image: fashion },
+        { name: "food", image: food },
+        { name: "healthy", image: healthy },
+        { name: "toys", image: toys },
+        { name: "feeding", image: feeding },
+        { name: "image", image: equipment },
+      ]);
+      setLoading(false);
+    }, 2000); // Simulasikan waktu pemuatan
+  }, []);
+
+  const handlePageChange = (selectedItem) => {
+    // Logika untuk perubahan halaman
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    // Logika untuk perubahan kategori
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted with data:", formData);
+  };
+
   const handleFileDrop = (acceptedFiles) => {
     console.log("Files uploaded:", acceptedFiles);
   };
@@ -179,12 +229,15 @@ export default function Home() {
           </div>
           <Pagination pageCount={pageCount} onPageChange={handlePageChange} />
           {/* <Button
+          <Button
             className="mt-4 bg-blue-500 text-white rounded"
             onClick={() => setIsModalOpen(true)}
           >
             Open Modal
           </Button> */}
           {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          </Button>
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <Form onSubmit={handleFormSubmit} className="space-y-4">
               <Input
                 label="Name"
@@ -209,6 +262,7 @@ export default function Home() {
               </Button>
             </Form>
           </Modal> */}
+          </Modal>
         </>
       )}
     </div>
