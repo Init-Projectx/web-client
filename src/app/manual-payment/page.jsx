@@ -1,7 +1,7 @@
 "use client";
 
 import Input from "@/components/ui/Input";
-import styles from "./userProfile.module.css"
+import styles from "./manualPayment.module.css"
 import FileUpload from "@/components/ui/FileUpload";
 
 
@@ -23,10 +23,10 @@ const ManualPayment = () => {
                             <div className="accountnumber ms-[10rem] me-[rem]">
                                 <p className="poppins-semibold mb-7
                                 ">Account Number</p>
-                                <Input className={styles.input}/>
-                                <Input className={styles.input}/>
-                                <Input className={styles.input}/>
-                                <Input/>
+                                <div className={styles.input}>99999999999</div>
+                                <div className={styles.input}>99999999999</div>
+                                <div className={styles.input}>99999999999</div>
+                                <div className={styles.input}>99999999999</div>
                             </div>
                             <div>
                                 <p className="poppins-semibold">Tutorial</p>
