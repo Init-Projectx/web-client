@@ -1,4 +1,9 @@
+import { Jwt } from "jsonwebtoken";
+
 import { userInstance } from "@/libs/axios/axiosInstance";
+import { jwtDecode } from "jwt-decode";
+
+const verifyToken = jwtDecode
 
 const getCart = async (data) => {
     try {
