@@ -105,12 +105,12 @@ export default function Navbar() {
               />
               {isModalOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
+                  <Link href="/address">
                   <Button 
-                    onClick={handleLogout}
                     className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
-                  >
-                    <Link href="/adress"/>Adress
+                  >Address
                   </Button>
+                  </Link>
                   <Button 
                     onClick={handleLogout}
                     className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
