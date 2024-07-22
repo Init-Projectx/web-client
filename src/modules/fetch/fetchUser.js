@@ -1,8 +1,8 @@
 import { userInstance } from "@/libs/axios/axiosInstance";
 
-const getUser = async () => {
+const getUser = async (id) => {
     try {
-        const response = await userInstance.get('users');
+        const response = await userInstance.get(`/users`, id);
         return response.data;
     } catch (error) {
         console.error("Error fetching user data:", error.response ? error.response.data : error.message);

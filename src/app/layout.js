@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
         <title>MiniMiracle</title>
       </Head>
       <body
-        className={`${inter.className} bg-color-primary`}
+        className={`${inter.className} bg-color-primary text-sm`}
         suppressHydrationWarning={true}>
         <Navbar />
         {children}
