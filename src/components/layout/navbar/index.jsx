@@ -61,7 +61,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="md:px-20 px-2 bg-color-primary z-10 navbar-border w-full border border-color-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 md:px-20 px-2 bg-color-primary bg-white navbar-border w-full border border-color-gray-200 shadow-lg">
       <div className="flex md:flex-row flex-col justify-between md:items-center p-4 gap-2">
         <Link
           href="/"
@@ -116,13 +116,13 @@ export default function Navbar() {
                 {isModalOpen && (
                   <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
                     <Link href="/address">
-                      <Button className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
+                      <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
                         Address
                       </Button>
                     </Link>
                     <Button
                       onClick={handleLogout}
-                      className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
+                      className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
                     >
                       Logout
                     </Button>

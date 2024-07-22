@@ -4,14 +4,14 @@ import Image from "next/image";
 const CardProduct = ({ product}) => {
   return (
     <div
-      className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
+      className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer border text-sm"
     >
       <div className="relative">
         <Image
           src={product.photo}
           alt={product.name}
           layout="responsive"
-          width={400}
+          width={450}
           height={250}
           className="object-cover rounded-md border-b-2 border-orange-400"
         />
