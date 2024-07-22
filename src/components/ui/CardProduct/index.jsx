@@ -1,19 +1,28 @@
 import React from "react";
 import Image from "next/image";
 
-const CardProduct = ({ product }) => {
+const CardProduct = ({ product}) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg p-4 m-4">
-      <Image
-        src={product.image}
-        alt={product.name}
-        width={200}
-        height={200}
-        className="w-full h-48 object-cover rounded-t-lg"
-      />
-      <h2 className="text-xl font-bold mt-4">{product.name}</h2>
-      <p className="text-gray-700 mt-2">{product.description}</p>
-      <p className="text-gray-900 font-bold mt-4">${product.price}</p>
+    <div
+      className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer"
+    >
+      <div className="relative">
+        <Image
+          src={product.photo}
+          alt={product.name}
+          layout="responsive"
+          width={400}
+          height={250}
+          className="object-cover rounded-md border-b-2 border-orange-400"
+        />
+      </div>
+      <div className="p-4">
+        <h2 className="font-bold mb-2">{product.name}</h2>
+        <p className="text-gray-700 mb-4 text-sm">{product.description}</p>
+        <div className="flex items-center justify-between">
+          <p className="text-gray-900 font-bold">Rp. {product.price}</p>
+        </div>
+      </div>
     </div>
   );
 };

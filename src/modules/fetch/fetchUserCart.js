@@ -1,13 +1,9 @@
-import { Jwt } from "jsonwebtoken";
-
 import { userInstance } from "@/libs/axios/axiosInstance";
-import { jwtDecode } from "jwt-decode";
 
-const verifyToken = jwtDecode
 
-const getCart = async (data) => {
+const getCart = async (id) => {
     try {
-        const response = await userInstance.get('/carts', data);
+        const response = await userInstance.get(`/carts/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching cart data:", error.response ? error.response.data : error.message);
@@ -16,11 +12,12 @@ const getCart = async (data) => {
 }
 
 const updateCart = async (id, data) => {
+    console.log('<<<<<<<<<<<<<<< KENAPA RESPONSENYA BEGINIIIII', data)
     try {
         const response = await userInstance.put(`/carts/${id}`, data);
         return response.data;
     } catch (error) {
-        console.error("Error fetching cart data:", error.response ? error.response.data : error.message);
+        console.error("Error update cart data:", error.response ? error.response.data : error.message);
         throw error;
     }
 }
