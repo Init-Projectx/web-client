@@ -4,7 +4,7 @@ const Button = ({ children, onClick, className, type = "button" }) => {
   return (
     <button
       onClick={onClick}
-      className={`py-2 px-4 rounded font-medium ${className}`}
+      className={`py-2 px-4 rounded font-sm ${className}`}
       type={type}
     >
       {children}

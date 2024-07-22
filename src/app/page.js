@@ -78,7 +78,7 @@ export default function Home() {
             </div>
             <div className="mt-10">
               <h3 className="text-xl font-bold text-color-dark">Product List</h3>
-              <div className="product-list grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 mt-8">
+              <div className="product-list grid lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-5 gap-6 mt-8 text-xs md:text-sm sm:text-sm">
                 {products.map((product) => (
                   <Link href={`/product/${product.slug}`} key={product.id}>
                       <CardProduct product={product} />
