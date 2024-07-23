@@ -188,7 +188,7 @@ const CheckoutView = () => {
           </div>
           <div className="w-full justify-between border h-4/6 px-2 rounded-xl flex items-center mt-[-40px]">
             <p className="ms-3">Midtrans</p>
-              <Payment />
+            <Payment />
           </div>
         </div>
       </Modal>
