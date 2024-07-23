@@ -1,6 +1,5 @@
 "use client";
 
-import Cart from "@/app/carts/page";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import { getUser } from "@/modules/fetch/fetchUser";
@@ -8,6 +7,7 @@ import { getCart } from "@/modules/fetch/fetchUserCart";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import Payment from "./payment";
 
 const CheckoutView = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -63,7 +63,6 @@ const CheckoutView = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isModalOpen]);
-  
 
   return (
     <div className="flex w-full pr-8 gap-4 mb-28">
@@ -134,9 +133,15 @@ const CheckoutView = () => {
             <div className="px-5 py-8">
               <div className="grid grid-cols-2 gap-3 text-center items-center">
                 <p>Product Price</p>
-                  <p className="pl-8 font-bold mt-3">
-                    Rp. {cart !== null ? cart?.cart_items.reduce((total, item) => total + Number(item.product.price), 0) : '-'}
-                  </p>
+                <p className="pl-8 font-bold mt-3">
+                  Rp.{" "}
+                  {cart !== null
+                    ? cart?.cart_items.reduce(
+                        (total, item) => total + Number(item.product.price),
+                        0
+                      )
+                    : "-"}
+                </p>
               </div>
               <div className="grid grid-cols-2 gap-3 text-center items-center">
                 <p>Shipping cost</p>
@@ -172,7 +177,7 @@ const CheckoutView = () => {
           </div>
           <div className="w-[300px] justify-between border h-4/6 rounded-xl flex items-center mt-[-20px]">
             <p className="ms-3">Bank Transfer</p>
-            <Link href="/manual-payment" className="pr-3">
+            <Link href="/payment/manual-payment" className="pr-3">
               <button
                 type="button"
                 className="w-20 h-7 flex justify-center items-center focus:outline-none text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg text-sm px-5 py-2"
@@ -181,16 +186,9 @@ const CheckoutView = () => {
               </button>
             </Link>
           </div>
-          <div className="w-full justify-between border h-4/6 rounded-xl flex items-center mt-[-40px]">
-            <p className="ms-3">Virtual Account</p>
-            <Link href="/" className="pr-3">
-              <button
-                type="button"
-                className="w-20 h-7 flex justify-center items-center focus:outline-none text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2"
-              >
-                Pay
-              </button>
-            </Link>
+          <div className="w-full justify-between border h-4/6 px-2 rounded-xl flex items-center mt-[-40px]">
+            <p className="ms-3">Midtrans</p>
+            <Payment />
           </div>
         </div>
       </Modal>

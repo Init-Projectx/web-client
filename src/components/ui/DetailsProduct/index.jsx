@@ -55,21 +55,21 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
           <h1 className="text-2xl font-bold mb-6 text-center">
             {product.name}
           </h1>
-          <div className="mb-4 grid grid-cols-2 ml-8">
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Stock </span>
             <span className="font-bold">
               {isOutOfStock ? "Habis" : product.Product_Warehouses[0].stock}
             </span>
           </div>
-          <div className="mb-4 grid grid-cols-2 ml-8">
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Harga </span>
-            <span className="font-bold">Rp {product.price.toLocaleString("id-ID")}</span>
+            <span className="font-bold">Rp. {product.price.toLocaleString("id-ID")}</span>
           </div>
-          <div className="mb-4 grid grid-cols-2 ml-8">
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Weight </span>
             <span className="font-bold">{product.weight} gram</span>
           </div>
-          <div className="mb-12 grid grid-cols-2 ml-8">
+          <div className="mb-12 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Descirption Product </span>
             <span className="font-bold">{product.description}</span>
           </div>
@@ -78,23 +78,12 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
               className={`w-full py-2 rounded-md ${
                 isOutOfStock
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-amber-100 hover:bg-amber-200 text-amber-500"
+                  : "bg-amber-500 hover:bg-amber-300 text-white"
               }`}
               onClick={onAddToCart}
               disabled={isOutOfStock}
             >
               +Add to Cart
-            </button>
-            <button
-              className={`w-full py-2 rounded-md ${
-                isOutOfStock
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-amber-500 hover:bg-amber-300 text-white"
-              }`}
-              onClick={onBuyNow}
-              disabled={isOutOfStock}
-            >
-              Buy Now
             </button>
           </div>
         </div>

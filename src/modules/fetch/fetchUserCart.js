@@ -34,7 +34,7 @@ const shippingCost = async (data) => {
 
 const resetCart = async (id) => {
     try {
-        const response = await userInstance.delete(`/carts/${id}`);
+        const response = await userInstance.delete(`/carts`, id);
         return response.data;
     } catch (error) {
         console.error("Error fetching reset cart data:", error.response ? error.response.data : error.message);
