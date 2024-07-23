@@ -219,7 +219,7 @@ const CartView = () => {
               <h4>{items.product.name}</h4>
               <h4>{items.product.description}</h4>
             </div>
-            <ButtonQuantity />
+            <h4>{items.quantity}</h4>
             <p className="font-bold">Rp. {items.product.price}</p>
             <button
               onClick={() => handleTrashClick(items.product.id)}
