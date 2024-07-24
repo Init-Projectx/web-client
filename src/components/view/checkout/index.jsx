@@ -77,8 +77,9 @@ const CheckoutView = () => {
               <p>loading...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-3 h-20 gap-8 w-full text-center items-center">
-              <div className="flex flex-row items-center poppins-bold pl-10">
+            <div className="grid grid-cols-4 h-20 gap-8 w-full text-center items-center">
+              <p className="font-bold">User Details:</p>
+              <div className="flex flex-row items-center pl-10">
                 {user.username}
               </div>
               <p>{user.phone_number}</p>
@@ -92,7 +93,7 @@ const CheckoutView = () => {
               {cart.cart_items.map((items, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-3 w-full gap-2 text-center items-center px-3 py-3"
+                  className="grid grid-cols-4 w-full gap-2 text-center items-center px-3 py-3"
                 >
                   <div className="pl-5 grid grid-cols-2 text-center items-center">
                     <img
@@ -100,13 +101,10 @@ const CheckoutView = () => {
                       alt="img"
                       className="me-4 rounded-lg"
                     />
-                    <div className="text-center">
-                      <p className="mb-2">
-                        {items.name}
-                        <br />
-                        <span>{items.description}</span>
-                      </p>
-                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="mb-2">Product Name</p>
+                    <p className="mb-2">{items.product.name}</p>
                   </div>
                   <div className="grid grid-rows-2 gap-0">
                     <p className="mb-2">Quantity</p>
@@ -188,7 +186,7 @@ const CheckoutView = () => {
           </div>
           <div className="w-full justify-between border h-4/6 px-2 rounded-xl flex items-center mt-[-40px]">
             <p className="ms-3">Midtrans</p>
-            <Payment />
+            <Payment className={'ml-4'} />
           </div>
         </div>
       </Modal>
