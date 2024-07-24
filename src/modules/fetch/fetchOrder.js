@@ -30,9 +30,27 @@ const createOrder = async (data) => {
     }
 }
 
-const updateStatus = async (id) => {
+const payment = async (id, data) => {
     try {
-        const response = await userInstance.put(`/orders/${id}`);
+        const response = await userInstance.post(`/orders/payment/${id}`, data);
+        return response;
+    } catch (error) {
+        console.error("Error Payment:", error.response ? error.response.data : error.message);
+    }
+}
+
+const midtrans = async (data) => {
+    try {
+        const response = await userInstance.put('/payment/midtrans', data);
+        return response.data;
+    } catch (error) {
+        console.error("Error Fetch Midtrans Payment:", error.response ? error.response.data : error.message);
+    }
+}
+
+const updateStatus = async (id, data) => {
+    try {
+        const response = await userInstance.put(`/orders/${id}`, data);
         return response.data;
     } catch (error) {
         console.error("Error fetching order data:", error.response ? error.response.data : error.message);
@@ -44,5 +62,7 @@ export {
     findAll,
     findOne,
     createOrder,
-    updateStatus
+    updateStatus,
+    payment,
+    midtrans
 }

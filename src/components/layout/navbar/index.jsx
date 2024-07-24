@@ -3,26 +3,25 @@
 import React, { useState, useEffect } from "react";
 import InputSearch from "@/components/layout/navbar/inputSearch";
 import Link from "next/link";
-import logo from "@/assets/images/logo_minimiracle.png";
-import { UserCircle, ShoppingBag, GearSix } from "@phosphor-icons/react";
-import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Modal from "react-modal";
 import axios from "axios";
+import useAuthStore from "@/libs/globalState";
 
 export default function Navbar() {
   const [cartItems, setCartItems] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const { isLoggedIn, setLoginStatus } = useAuthStore();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      setIsLoggedIn(true);
+      setLoginStatus(true);
     }
-  }, []);
+  }, [setLoginStatus]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -42,7 +41,7 @@ export default function Navbar() {
       if (response.status === 200) {
         console.log("Login Success:", response.data);
         localStorage.setItem("token", response.data.accessToken);
-        setIsLoggedIn(true);
+        setLoginStatus(true);
         alert("Login Success");
         closeModal();
         window.location.reload();
@@ -57,11 +56,11 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false);
+    setLoginStatus(false);
   };
 
   return (
-    <header className="sticky top-0 z-50 md:px-20 px-2 bg-color-primary bg-white navbar-border w-full border border-color-gray-200 shadow-lg">
+    <header className="sticky top-0 z-50 md:px-20 px-2 bg-color-primary bg-white navbar-border w-full border">
       <div className="flex md:flex-row flex-col justify-between md:items-center p-4 gap-2">
         <Link
           href="/"
@@ -75,9 +74,11 @@ export default function Navbar() {
         <div className="flex sm:flex-row justify-between items-center md:items-center gap-3">
           {!isLoggedIn ? (
             <>
-              <Button className="focus:outline-none text-primaryColor bg-secondaryColor hover:bg-primaryColor hover:text-white rounded-lg h-10 md:w-32 w-40">
-                Register
-              </Button>
+              <Link href={'/auth/register'}>
+                <Button className="focus:outline-none text-primaryColor bg-secondaryColor hover:bg-primaryColor hover:text-white rounded-lg h-10 md:w-32 w-40">
+                  Register
+                </Button>
+              </Link>
               <Button
                 onClick={openModal}
                 className="focus:outline-none text-white bg-primaryColor hover:bg-secondaryColor hover:text-primaryColor rounded-lg h-10 md:w-32 w-40"
@@ -114,10 +115,15 @@ export default function Navbar() {
                   onClick={() => setIsModalOpen(!isModalOpen)}
                 />
                 {isModalOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
-                    <Link href="/address">
+                  <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32">
+                    <Link href="/">
                       <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
-                        Address
+                        Edit Profile
+                      </Button>
+                    </Link>
+                    <Link href="/orders">
+                      <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
+                        Order List
                       </Button>
                     </Link>
                     <Button
@@ -193,7 +199,7 @@ export default function Navbar() {
           <div className="regisLink">
             <p>
               Don't have account?
-              <Link href={"#"} className="regisLinkColor">
+              <Link href={"/auth/register"} className="regisLinkColor">
                 {" "}
                 Register
               </Link>
