@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/Button";
 import Image from "next/image";
-import registerImage from "../../assets/images/register-image.png";
+import registerImage from "../../../../assets/images/register-image.png";
+import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 const RegisterView = () => {
   const [form, setForm] = useState({
