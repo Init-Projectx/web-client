@@ -12,11 +12,20 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        'bar-loading': {
+          '0%': { width: '100%' },
+          '100%': { width: '0%' },
+        },
+      },
+      animation: {
+        'bar-loading': 'bar-loading 2s forwards',
+      },
       colors: {
         primaryColor: '#E5B91B',
-        secondaryColor: '#FFE8CC'
-      }
+        secondaryColor: '#FFE8CC',
+      },
     },
+    plugins: [],
   },
-  plugins: [],
 };
