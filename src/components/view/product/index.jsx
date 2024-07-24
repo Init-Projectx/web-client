@@ -92,32 +92,6 @@ const DetailsProductPage = ({ slug }) => {
     }
   };
 
-  const handleBuyNow = async () => {
-    if (product) {
-      try {
-        const data = await buyNow(product.id, quantity);
-        console.log("Proceeding to checkout");
-      } catch (error) {
-        console.error("Error proceeding to checkout:", error);
-      }
-    }
-  };
-
-  const handleQuantityChange = (e) => {
-    const newQuantity = Number(e.target.value);
-    setQuantity(newQuantity);
-  };
-
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const handleIncrease = () => {
-    setQuantity(quantity + 1);
-  };
-
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -131,11 +105,7 @@ const DetailsProductPage = ({ slug }) => {
       product={product}
       cartData={cart}
       quantity={quantity}
-      onQuantityChange={handleQuantityChange}
-      onDecrease={handleDecrease}
-      onIncrease={handleIncrease}
       onAddToCart={handleAddToCart}
-      onBuyNow={handleBuyNow}
     />
   );
 };
