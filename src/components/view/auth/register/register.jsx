@@ -56,8 +56,10 @@ const RegisterView = () => {
           password: "",
         });
 
+        localStorage.setItem("token", data.token);
+
         setTimeout(() => {
-          router.push("/login");
+          router.push("/");
         }, 1000);
       }
     } catch (err) {

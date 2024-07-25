@@ -92,9 +92,11 @@ export default function Navbar() {
         <div className="flex sm:flex-row justify-between items-center md:items-center gap-3">
           {!isLoggedIn ? (
             <>
-              <Button className="focus:outline-none text-primaryColor bg-secondaryColor hover:bg-primaryColor hover:text-white rounded-lg h-10 md:w-32 w-40">
-                Register
-              </Button>
+              <Link href={'/auth/register'}>
+                <Button className="focus:outline-none text-primaryColor bg-secondaryColor hover:bg-primaryColor hover:text-white rounded-lg h-10 md:w-32 w-40">
+                  Register
+                </Button>
+              </Link>
               <Button
                 onClick={openModal}
                 className="focus:outline-none text-white bg-primaryColor hover:bg-secondaryColor hover:text-primaryColor rounded-lg h-10 md:w-32 w-40"
@@ -131,10 +133,15 @@ export default function Navbar() {
                   onClick={() => setIsModalOpen(!isModalOpen)}
                 />
                 {isModalOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
-                    <Link href="/address">
+                  <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32">
+                    <Link href="/">
                       <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
-                        Address
+                        Edit Profile
+                      </Button>
+                    </Link>
+                    <Link href="/orders">
+                      <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
+                        Order List
                       </Button>
                     </Link>
                     <Button 
@@ -216,7 +223,7 @@ export default function Navbar() {
           <div className="regisLink">
             <p>
               Don't have account?
-              <Link href={"#"} className="regisLinkColor">
+              <Link href={"/auth/register"} className="regisLinkColor">
                 {" "}
                 Register
               </Link>
