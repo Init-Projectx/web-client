@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import CardProduct from "../CardProduct";
 import Link from "next/link";
+import idrConverter from "@/libs/idrConvert";
 
 const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
   const [productCategory, setProductCategory] = useState([]);
@@ -63,7 +64,7 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Harga </span>
-            <span className="font-bold">Rp. {product.price.toLocaleString("id-ID")}</span>
+            <span className="font-bold">{idrConverter(product.price)}</span>
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold ">Weight </span>
