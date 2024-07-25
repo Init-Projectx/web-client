@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import Payment from "./payment";
+import idrConverter from "@/libs/idrConvert";
 
 const CheckoutView = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -112,7 +113,7 @@ const CheckoutView = () => {
                   </div>
                   <div className="grid grid-rows-2">
                     <p className="mb-2">Initial Price</p>
-                    <p>Rp. {items.product.price}</p>
+                    <p>{idrConverter(items.product.price)}</p>
                   </div>
                 </div>
               ))}
@@ -143,12 +144,14 @@ const CheckoutView = () => {
               </div>
               <div className="grid grid-cols-2 gap-3 text-center items-center">
                 <p>Shipping cost</p>
-                <p className="pl-8 font-bold mt-3">Rp. {cart.shipping_cost}</p>
+                <p className="pl-8 font-bold mt-3">
+                  {idrConverter(cart.shipping_cost)}
+                </p>
               </div>
               <hr className="mt-3 mb-3 border-black" />
               <div className="grid grid-cols-2 gap-3 text-center items-center">
                 <p className="font-bold">Total</p>
-                <p className="pl-8 font-bold mt-3">Rp. {cart.net_price}</p>
+                <p className="pl-8 font-bold mt-3">{idrConverter(cart.net_price)}</p>
               </div>
               <div>
                 <Button
@@ -186,7 +189,7 @@ const CheckoutView = () => {
           </div>
           <div className="w-full justify-between border h-4/6 px-2 rounded-xl flex items-center mt-[-40px]">
             <p className="ms-3">Midtrans</p>
-            <Payment className={'ml-4'} />
+            <Payment className={"ml-4"} />
           </div>
         </div>
       </Modal>
