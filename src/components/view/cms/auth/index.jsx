@@ -22,8 +22,10 @@ const AuthCms = ({ isOpen, onClose }) => {
       const login = await loginCms(data);
       if (login) {
         onClose();
-        toast.success('Login CMS Success');
-        router.push('/cms/dashboard')
+        setTimeout(() => {
+          toast.success('Login CMS Success');
+        }, 1);
+        router.push('/cms/dashboard');
       }
     } catch (error) {
       console.log("Login CMS Failed", error.message);

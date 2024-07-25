@@ -52,7 +52,7 @@ export default function Navbar() {
         toast.success("Login Success!"); // Pesan toast berhasil
         closeModal();
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = '/'; // Mengarahkan ke halaman utama
         }, 1000);
         
       }
@@ -61,10 +61,7 @@ export default function Navbar() {
         "Login Failed:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Login Failed: " + (error.response ? error.response.data.message : error.message)); // Pesan toast gagal
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1000);
+      toast.error("Login Failed: " + (error.response ? error.response.data.message : error.message)); 
     }
   };
 
@@ -72,8 +69,9 @@ export default function Navbar() {
     localStorage.removeItem("token");
     setLoginStatus(false);
     toast.info("Logged out successfully.");
+    closeModal();
     setTimeout(() => {
-      window.location.reload();
+      window.location.href = '/';
     }, 1000);
   };
 
