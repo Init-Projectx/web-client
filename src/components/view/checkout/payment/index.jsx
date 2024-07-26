@@ -7,7 +7,7 @@ import { getCart } from "@/modules/fetch/fetchUserCart";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 
-const Payment = () => {
+const Payment = ({ className }) => {
   const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +85,6 @@ const Payment = () => {
     })),
   };
 
-
   const handlePayment = async () => {
     try {
       const response = await createOrder(orderData);
@@ -128,7 +127,7 @@ const Payment = () => {
     <div>
       <Button
         onClick={handlePayment}
-        className={`w-20 h-7 flex justify-center items-center focus:outline-none text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg text-sm px-5 py-2 ${
+        className={`${className} w-20 h-7 flex justify-center items-center focus:outline-none text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg text-sm px-5 py-2 ${
           orderStatus ? "opacity-50 cursor-not-allowed" : ""
         }`}
         disabled={orderStatus}

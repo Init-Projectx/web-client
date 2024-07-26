@@ -3,7 +3,6 @@ import { userInstance } from "@/libs/axios/axiosInstance";
 const getAllProducts = async () => {
     try {
         const response = await userInstance.get(`/products`);
-        console.log('<<<<<<<<<<<,, PRODUCT', response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching product data:", error.response ? error.response.data : error.message);

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import idrConverter from "@/libs/idrConvert";
 
 const CardProduct = ({ product}) => {
   return (
@@ -20,7 +21,7 @@ const CardProduct = ({ product}) => {
         <h2 className="font-bold mb-2">{product.name}</h2>
         <p className="text-gray-700 mb-4 text-sm">{product.description}</p>
         <div className="flex items-center justify-between">
-          <p className="text-gray-900 font-bold">Rp. {product.price}</p>
+          <p className="text-gray-900 font-bold">{idrConverter(product.price)}</p>
         </div>
       </div>
     </div>

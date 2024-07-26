@@ -10,6 +10,7 @@ const Input = ({ label, value, onChange, type = 'text', name, className }) => {
         onChange={onChange}
         name={name}
         className="border rounded p-2"
+        required
       />
     </div>
   );

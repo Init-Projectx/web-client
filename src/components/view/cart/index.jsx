@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonQuantity from "@/components/ui/ButtonQuantity";
+import idrConverter from "@/libs/idrConvert";
 import { getUser } from "@/modules/fetch/fetchUser";
 import {
   deleteCartItem,
@@ -220,7 +220,7 @@ const CartView = () => {
               <h4>{items.product.description}</h4>
             </div>
             <h4>{items.quantity}</h4>
-            <p className="font-bold">Rp. {items.product.price}</p>
+            <p className="font-bold">{idrConverter(items.product.price)}</p>
             <button
               onClick={() => handleTrashClick(items.product.id)}
               className="block pl-10"
@@ -289,7 +289,8 @@ const CartView = () => {
                   <option value="">Select Shipping Method</option>
                   {shippingCostData?.map((method, index) => (
                     <option key={index} value={method.service}>
-                      {method.description} - Rp. {method.cost[0]?.value || 0}
+                      {method.description} -{" "}
+                      {idrConverter(method.cost[0]?.value || 0)}
                     </option>
                   ))}
                 </select>
@@ -297,7 +298,7 @@ const CartView = () => {
               <hr className="mt-2 mb-2" />
               <div className="px-8 mt-3 grid grid-cols-2">
                 <span className="font-bold">Total</span>
-                <p className="font-bold pl-14">Rp. {totalCost}</p>
+                <p className="font-bold pl-14">{idrConverter(totalCost)}</p>
               </div>
               <div className="px-8 mt-5">
                 <button

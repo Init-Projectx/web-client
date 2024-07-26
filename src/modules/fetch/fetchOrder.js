@@ -48,9 +48,9 @@ const midtrans = async (data) => {
     }
 }
 
-const updateStatus = async (id) => {
+const updateStatus = async (id, data) => {
     try {
-        const response = await userInstance.put(`/orders/${id}`);
+        const response = await userInstance.put(`/orders/${id}`, data);
         return response.data;
     } catch (error) {
         console.error("Error fetching order data:", error.response ? error.response.data : error.message);

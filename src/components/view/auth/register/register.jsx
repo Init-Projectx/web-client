@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import registerImage from "../../../../assets/images/register-image.png";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -12,6 +13,11 @@ const RegisterView = () => {
     email: "",
     password: "",
   });
+  const [alert, setAlert] = useState({
+    type: "",
+    message: "",
+  });
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,32 +40,64 @@ const RegisterView = () => {
 
       if (!res.ok) {
         const error = await res.json();
-        console.error('Error:', error);
+        setAlert({
+          type: "error",
+          message: error.message || "Registration failed. Please try again.",
+        });
       } else {
         const data = await res.json();
-        console.log('Success:', data);
+        setAlert({
+          type: "success",
+          message: "Registration successful! You will be redirected to the login page",
+        });
+        setForm({
+          username: "",
+          email: "",
+          password: "",
+        });
+
+        localStorage.setItem("token", data.token);
+
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
       }
     } catch (err) {
-      console.error('Network error:', err);
+      setAlert({
+        type: "error",
+        message: "Network error. Please try again later.",
+      });
     }
   };
 
   return (
-    <div className="flex flex-col md:px-24 px-10 py-[5.5rem]">
-      <h1 className="text-3xl font-bold text-center py-6">MiniMiracle</h1>
+    <div className="flex flex-col md:px-24 px-10">
       <div className="flex flex-row justify-center items-center w-full">
         <div className="hidden md:flex md:w-1/2 justify-center items-center">
-          <Image
-            src={registerImage}
-            alt="Register Illustration"            
-            className="rounded-md"
-          />
+          <Image src={registerImage} alt="Register Illustration" className="" />
         </div>
-        <div className="w-full md:w-1/2 p-8 overflow-y-auto">
-          <h2 className="text-2xl text-center font-bold mb-6">Register</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-col items-center">
-              <label className="text-black mb-2 font-semibold w-1/2 text-left">
+        <div className="w-full md:w-1/2">
+          <h2 className="text-xl text-center font-bold mb-6">Register</h2>
+
+          {alert.message && (
+            <div
+              className={`p-4 mb-4 text-sm rounded-lg ${
+                alert.type === "error"
+                  ? "text-red-800 bg-red-50 dark:text-red-400"
+                  : "text-green-800 bg-green-50 dark:text-green-400"
+              }`}
+              role="alert"
+            >
+              <span className="font-medium">
+                {alert.type === "error" ? "Error!" : "Success!"}
+              </span>{" "}
+              {alert.message}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="text-sm">
+            <div className="flex flex-col w-full">
+              <label className="text-black mb-2 font-semibold text-left">
                 Username
               </label>
               <Input
@@ -68,11 +106,11 @@ const RegisterView = () => {
                 placeholder="Username"
                 value={form.username}
                 onChange={handleChange}
-                className="mb-4 w-1/2"
+                className="mb-2 border border-black rounded-md"
               />
             </div>
-            <div className="flex flex-col items-center">
-              <label className="text-black mb-2 font-semibold w-1/2 text-left">
+            <div className="flex flex-col w-full">
+              <label className="text-black mb-2 font-semibold text-left">
                 Email
               </label>
               <Input
@@ -81,11 +119,11 @@ const RegisterView = () => {
                 placeholder="Email"
                 value={form.email}
                 onChange={handleChange}
-                className="mb-4 w-1/2"
+                className="mb-2 border border-black rounded-md"
               />
             </div>
-            <div className="flex flex-col items-center">
-              <label className="text-black mb-2 font-semibold w-1/2 text-left">
+            <div className="flex flex-col">
+              <label className="text-black mb-2 font-semibold text-left">
                 Password
               </label>
               <Input
@@ -94,13 +132,13 @@ const RegisterView = () => {
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
-                className="mb-4 w-1/2"
+                className="mb-5 border border-black rounded-md w-full"
               />
             </div>
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="bg-[#E5B91B] text-white rounded w-1/2"
+                className="bg-[#E5B91B] text-white text-sm rounded w-full"
               >
                 Register
               </Button>
