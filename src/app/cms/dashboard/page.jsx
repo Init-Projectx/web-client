@@ -8,4 +8,6 @@ const CmsDashboard = () => {
   );
 };
 
-export default LayoutDashboard;
+
+export default CmsDashboard;
+
