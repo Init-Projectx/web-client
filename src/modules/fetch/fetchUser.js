@@ -10,7 +10,7 @@ const getUser = async (id) => {
     }
 }
 
-const updateuser = async (data) => {
+const updateUser = async (data) => {
     try {
         const response = await userInstance.put('users', data);
         return response.data;
@@ -22,5 +22,5 @@ const updateuser = async (data) => {
 
 export {
     getUser,
-    updateuser
+    updateUser
 }
