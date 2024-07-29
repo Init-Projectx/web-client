@@ -49,10 +49,10 @@ export default function Navbar() {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.accessToken);
         setLoginStatus(true);
-        toast.success("Login Success!"); // Pesan toast berhasil
+        toast.success("Login Success!"); 
         closeModal();
         setTimeout(() => {
-          window.location.href = '/'; // Mengarahkan ke halaman utama
+          window.location.href = '/'; 
         }, 1000);
         
       }
@@ -143,8 +143,8 @@ export default function Navbar() {
                       </Button>
                     </Link>
                     <Button 
-                      onClick={openCmsModal} // Use openCmsModal here
-                      className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
+                      onClick={openCmsModal} 
+                      className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
                     >
                       CMS dashboard
                     </Button>
@@ -230,7 +230,7 @@ export default function Navbar() {
         </form>
       </Modal>
       <AuthCms isOpen={isCmsModalOpen} onClose={closeCmsModal} />
-      <ToastContainer /> {/* Pastikan ini ada dan ditampilkan */}
+      <ToastContainer />
     </header>
   );
 }
