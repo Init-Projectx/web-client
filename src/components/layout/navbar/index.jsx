@@ -132,7 +132,7 @@ export default function Navbar() {
                 />
                 {isModalOpen && (
                   <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32">
-                    <Link href="/">
+                    <Link href="/user-profile">
                       <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
                         Edit Profile
                       </Button>

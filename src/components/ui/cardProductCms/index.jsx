@@ -69,7 +69,7 @@ const CardProductCms = ({ product }) => {
       const data = await deleteProductCms(product.slug);
       setIsModalVisible(false);
       alert("Delete product success");
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("Failed to delete product", error.message);
     }
