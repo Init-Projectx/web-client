@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { getProductCategory } from "@/modules/fetch/fetchUserProduct";
 import Image from "next/image";
@@ -66,8 +66,14 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
             <span className="font-semibold">Weight </span>
             <span className="font-bold">{product.weight} gram</span>
           </div>
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
+            <span className="font-semibold">Warehouse</span>
+            <span className="font-bold">
+              {product.Product_Warehouses[0].warehouse.name}
+            </span>
+          </div>
           <div className="mb-12 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold">Descirption Product </span>
+            <span className="font-semibold">Description Product </span>
             <span className="font-bold">{product.description}</span>
           </div>
           <div className="flex gap-4">
