@@ -8,5 +8,4 @@ const CmsDashboard = () => {
   );
 };
 
-
 export default CmsDashboard;

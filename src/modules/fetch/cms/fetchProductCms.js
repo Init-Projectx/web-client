@@ -28,9 +28,13 @@ const addProductCms = async (data) => {
     }
 }
 
-const editProductCms = async (slug, data) => {
+const editProductCms = async (slug, formData) => {
     try {
-        const response = await cmsInstance.put(`/products/${slug}`, data)
+        const response = await cmsInstance.put(`/products/${slug}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
         return response.data;
     } catch (error) {
         console.log('Failed to update product', error.message)

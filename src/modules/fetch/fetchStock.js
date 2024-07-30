@@ -9,3 +9,7 @@ const getStock = async (warehouseId, ProductId) => {
         throw error;
     }
 }
+
+export {
+    getStock
+}

@@ -7,21 +7,16 @@ import Button from "@/components/ui/Button";
 import Modal from "react-modal";
 import axios from "axios";
 import useAuthStore from "@/libs/globalState";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import AuthCms from "@/components/view/cms/auth";
 
 export default function Navbar() {
   const [cartItems, setCartItems] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCmsModalOpen, setIsCmsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { isLoggedIn, setLoginStatus } = useAuthStore();
 
   useEffect(() => {
-    // console.log('>>>>>>>>>>>>>>');
     const token = localStorage.getItem("token");
     if (token) {
       setLoginStatus(true);
@@ -30,9 +25,6 @@ export default function Navbar() {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const openCmsModal = () => setIsCmsModalOpen(true);
-  const closeCmsModal = () => setIsCmsModalOpen(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,32 +39,24 @@ export default function Navbar() {
       );
 
       if (response.status === 200) {
+        console.log("Login Success:", response.data);
         localStorage.setItem("token", response.data.accessToken);
         setLoginStatus(true);
-        toast.success("Login Success!"); // Pesan toast berhasil
+        alert("Login Success");
         closeModal();
-        setTimeout(() => {
-          window.location.href = '/'; // Mengarahkan ke halaman utama
-        }, 1000);
-        
+        window.location.reload();
       }
     } catch (error) {
       console.error(
         "Login Failed:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Login Failed: " + (error.response ? error.response.data.message : error.message)); 
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setLoginStatus(false);
-    toast.info("Logged out successfully.");
-    closeModal();
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 1000);
   };
 
   return (
@@ -142,12 +126,6 @@ export default function Navbar() {
                         Order List
                       </Button>
                     </Link>
-                    <Button 
-                      onClick={openCmsModal} // Use openCmsModal here
-                      className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
-                    >
-                      CMS dashboard
-                    </Button>
                     <Button
                       onClick={handleLogout}
                       className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
@@ -168,13 +146,13 @@ export default function Navbar() {
         className="modal"
         overlayClassName="overlay"
       >
-        <button
-          onClick={closeModal}
-          className="absolute top-1 right-4 text-gray-500 hover:text-gray-700 text-2xl"
-        >
-          ×
-        </button>
-        <div className="relative mt-6">
+        <div className="relative">
+          <button
+            onClick={closeModal}
+            className="absolute top-2 -right-10 text-gray-500 hover:text-gray-700 text-2xl"
+          >
+            ×
+          </button>
           <h2 className="logintitle flex poppins-bold text-center">Login</h2>
         </div>
         <form onSubmit={handleSubmit}>
@@ -229,8 +207,6 @@ export default function Navbar() {
           </div>
         </form>
       </Modal>
-      <AuthCms isOpen={isCmsModalOpen} onClose={closeCmsModal} />
-      <ToastContainer /> {/* Pastikan ini ada dan ditampilkan */}
     </header>
   );
 }

@@ -146,7 +146,7 @@ const RegisterView = () => {
           </form>
           <p className="mt-6 text-center">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-500">
+            <a href="/" className="text-blue-500">
               Login
             </a>
           </p>
