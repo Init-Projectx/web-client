@@ -1,8 +1,8 @@
-import instance from "@/libs/axios/axiosInstance";
+import { userInstance } from "@/libs/axios/axiosInstance";
 
 const findOneCity = async (id) => {
     try {
-        const response = await instance.get(`/cities/${id}`);
+        const response = await userInstance.get(`/cities/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching city data:", error.response ? error.response.data : error.message);
@@ -12,7 +12,7 @@ const findOneCity = async (id) => {
 
 const findCities = async (page, pageSize = 5) => {
     try {
-        const response = await instance.get(`/cities?page=${page}&pageSize=${pageSize}`);
+        const response = await userInstance.get(`/cities?page=${page}&pageSize=${pageSize}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching city data:", error.response ? error.response.data : error.message);
@@ -20,7 +20,17 @@ const findCities = async (page, pageSize = 5) => {
     }
 };
 
+const searchCities = async (query) => {
+    try {
+        const response = await userInstance.get(`/cities?query=${query}`);
+        return response.data;
+    } catch (error) {
+        console.log('Error search cities', error.message);
+    }
+}
+
 export {
     findCities,
-    findOneCity
+    findOneCity,
+    searchCities
 };

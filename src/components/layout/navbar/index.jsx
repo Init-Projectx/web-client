@@ -21,7 +21,6 @@ export default function Navbar() {
   const { isLoggedIn, setLoginStatus } = useAuthStore();
 
   useEffect(() => {
-    // console.log('>>>>>>>>>>>>>>');
     const token = localStorage.getItem("token");
     if (token) {
       setLoginStatus(true);
@@ -49,10 +48,10 @@ export default function Navbar() {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.accessToken);
         setLoginStatus(true);
-        toast.success("Login Success!"); 
+        toast.success("Login Success!"); // Pesan toast berhasil
         closeModal();
         setTimeout(() => {
-          window.location.href = '/'; 
+          window.location.href = '/'; // Mengarahkan ke halaman utama
         }, 1000);
         
       }
@@ -132,7 +131,7 @@ export default function Navbar() {
                 />
                 {isModalOpen && (
                   <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32">
-                    <Link href="/">
+                    <Link href="/user-profile">
                       <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
                         Edit Profile
                       </Button>
@@ -143,7 +142,7 @@ export default function Navbar() {
                       </Button>
                     </Link>
                     <Button 
-                      onClick={openCmsModal} 
+                      onClick={openCmsModal} // Use openCmsModal here
                       className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
                     >
                       CMS dashboard
@@ -230,7 +229,7 @@ export default function Navbar() {
         </form>
       </Modal>
       <AuthCms isOpen={isCmsModalOpen} onClose={closeCmsModal} />
-      <ToastContainer />
+      <ToastContainer /> {/* Pastikan ini ada dan ditampilkan */}
     </header>
   );
 }

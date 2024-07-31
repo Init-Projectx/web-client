@@ -10,31 +10,27 @@ import idrConverter from "@/libs/idrConvert";
 const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
   const [productCategory, setProductCategory] = useState([]);
   const [error, setError] = useState(null);
-  const [warehouseId, setWarehouseId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (product.Product_Warehouses.length > 0) {
-      const id = product.Product_Warehouses[0].warehouse_id;
-      if (id) {
-        setWarehouseId(id);
-      }
-    }
-  }, [product]);
-
-  useEffect(() => {
-    if (warehouseId) {
-      const fetchProduct = async () => {
-        try {
-          const data = await getProductCategory(warehouseId);
-          setProductCategory(data.data);
-        } catch (error) {
-          setError("Failed to fetch product");
+    const fetchProductData = async () => {
+      try {
+        if (product.Product_Warehouses.length > 0) {
+          const warehouseId = product.Product_Warehouses[0].warehouse_id;
+          if (warehouseId) {
+            const data = await getProductCategory(warehouseId);
+            setProductCategory(data.data);
+          }
         }
-      };
+      } catch (error) {
+        setError("Failed to fetch product");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      fetchProduct();
-    }
-  }, [warehouseId]);
+    fetchProductData();
+  }, [product]);
 
   const isOutOfStock = product.Product_Warehouses.length === 0;
 
@@ -57,21 +53,27 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
             {product.name}
           </h1>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold ">Stock </span>
+            <span className="font-semibold">Stock </span>
             <span className="font-bold">
               {isOutOfStock ? "Habis" : product.Product_Warehouses[0].stock}
             </span>
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold ">Harga </span>
+            <span className="font-semibold">Harga </span>
             <span className="font-bold">{idrConverter(product.price)}</span>
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold ">Weight </span>
+            <span className="font-semibold">Weight </span>
             <span className="font-bold">{product.weight} gram</span>
           </div>
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
+            <span className="font-semibold">Warehouse</span>
+            <span className="font-bold">
+              {product.Product_Warehouses[0].warehouse.name}
+            </span>
+          </div>
           <div className="mb-12 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold ">Descirption Product </span>
+            <span className="font-semibold">Description Product </span>
             <span className="font-bold">{product.description}</span>
           </div>
           <div className="flex gap-4">
@@ -79,7 +81,7 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
               className={`w-full py-2 rounded-md ${
                 isOutOfStock
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-amber-500 hover:bg-amber-300 text-white"
+                  : "bg-yellow-500 hover:bg-yellow-600 text-white"
               }`}
               onClick={onAddToCart}
               disabled={isOutOfStock}
@@ -93,7 +95,11 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
         <h1 className="ml-9 mt-5 font-bold text-xl">Same Category Products</h1>
         <hr />
         <div className="product-list grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 mt-8 px-10 py-5">
-          {error ? (
+          {isLoading ? (
+            <div className="w-full">
+              <h1 className="font-bold">Loading...</h1>
+            </div>
+          ) : error ? (
             <div>
               <h1 className="font-bold text-xl">{error}</h1>
             </div>

@@ -19,38 +19,29 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const data = await getAllCategories();
-        setCategories(data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
+        const [categoriesData, productsData] = await Promise.all([
+          getAllCategories(),
+          getAllProducts(currentPage),
+        ]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getAllProducts(currentPage);
-        setProducts(data.data);
-        setTotalPages(data.data.totalPages);
+        setCategories(categoriesData.data);
+        setProducts(productsData.data);
+        setTotalPages(productsData.data.totalPages);
       } catch (error) {
-        console.error("Error fetching products:", error.message);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, [currentPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    setLoading(true);
   };
 
   return (
@@ -81,7 +72,7 @@ export default function Home() {
               <div className="product-list grid lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-5 gap-6 mt-8 text-xs md:text-sm sm:text-sm">
                 {products.map((product) => (
                   <Link href={`/product/${product.slug}`} key={product.id}>
-                      <CardProduct product={product} />
+                    <CardProduct product={product} />
                   </Link>
                 ))}
               </div>
