@@ -12,7 +12,6 @@ const getCart = async (id) => {
 }
 
 const updateCart = async (id, data) => {
-    console.log('<<<<<<<<<<<<<<< KENAPA RESPONSENYA BEGINIIIII', data)
     try {
         const response = await userInstance.put(`/carts/${id}`, data);
         return response.data;
