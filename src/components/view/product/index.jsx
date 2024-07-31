@@ -16,48 +16,44 @@ const DetailsProductPage = ({ slug }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem("token");
 
       if (token) {
         const decodedToken = jwtDecode(token);
         const getUserId = decodedToken.id;
+        setUserId(getUserId);
 
         try {
-          const userData = await getUser(getUserId);
-          setUserId(userData);
+          const [userData, productData] = await Promise.all([
+            getUser(getUserId),
+            getProduct(slug),
+          ]);
+          const cartData = await getCart(getUserId);
+
+          setProduct(productData.data);
+          setCart(cartData?.data);
         } catch (err) {
-          console.error(err.message);
+          setError("Failed to fetch data");
+        } finally {
+          setLoading(false);
         }
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const productData = await getProduct(slug);
-        const cartData = await getCart(userId);
-
-        setCart(cartData?.data);
-        setProduct(productData.data);
-      } catch (error) {
-        setError("Failed to fetch product");
-      } finally {
+      } else {
+        setError("No token found");
         setLoading(false);
       }
     };
 
-    if (slug && userId) {
-      fetchProduct();
+    if (slug) {
+      fetchData();
     }
-  }, [slug, userId]);
+  }, [slug]);
 
   const handleAddToCart = async () => {
+    if (!product || !cart) return;
+
     try {
-      let updatedItems = [...(cart?.cart_items || [])];
+      let updatedItems = [...(cart.cart_items || [])];
       const productIndex = updatedItems.findIndex(
         (item) => item.product_id === product.id
       );
@@ -77,16 +73,16 @@ const DetailsProductPage = ({ slug }) => {
           .quantity,
       };
 
+      const warehouseId = product.Product_Warehouses[0].warehouse.id;
+
       const newCart = await updateCart(cart.id, {
-        courier: cart.courier,
-        shipping_method: cart.shipping_method,
-        shipping_cost: cart.shipping_cost,
-        warehouse_id: cart.warehouse_id,
+        ...cart,
+        warehouse_id: warehouseId,
         cart_items_attr: cartItemToUpdate,
       });
 
       setCart(newCart);
-      alert(`Product ${product.name} Added to cart`);
+      alert(`Product ${product.name} added to cart`);
     } catch (error) {
       console.error("Failed to add to cart:", error);
     }
