@@ -20,8 +20,13 @@ const getOneProductCms = async (slug) => {
 
 
 const addProductCms = async (data) => {
+    console.log(data)
     try {
-        const response = await cmsInstance.post('/', data);
+        const response = await cmsInstance.post('/products', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        } );
         return response.data;
     } catch (error) {
         console.log('Error add new product', error.message)
