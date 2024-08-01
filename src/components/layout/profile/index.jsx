@@ -89,7 +89,7 @@ const Profile = () => {
                     <h1 className={styles.poppinssemibold}>USER PROFILE</h1>
                 </div>
                 <div className="flex justify-center">
-                    <div className="grid grid-cols-2 w-4/6 flex flex-col justify-end">
+                    <div className="grid grid-cols-2 w-4/6 flex-col justify-end">
                         <div className="w-full flex flex-col">
                             <label className="text-sm ms-9 mt-4" htmlFor="username">Username</label>
                             <input 
