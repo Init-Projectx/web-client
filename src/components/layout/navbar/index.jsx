@@ -21,7 +21,6 @@ export default function Navbar() {
   const { isLoggedIn, setLoginStatus } = useAuthStore();
 
   useEffect(() => {
-    // console.log('>>>>>>>>>>>>>>');
     const token = localStorage.getItem("token");
     if (token) {
       setLoginStatus(true);
@@ -144,7 +143,7 @@ export default function Navbar() {
                     </Link>
                     <Button 
                       onClick={openCmsModal} // Use openCmsModal here
-                      className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
+                      className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
                     >
                       CMS dashboard
                     </Button>
