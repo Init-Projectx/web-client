@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import registerImage from "../../../../assets/images/register-image.png";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import useAuthStore from "@/libs/globalState";
 
 const RegisterView = () => {
+  const { setLoginStatus, setToken } = useAuthStore();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -46,17 +48,17 @@ const RegisterView = () => {
         });
       } else {
         const data = await res.json();
+        const { token } = data;
+
+        localStorage.setItem("token", token);
+        setToken(token);
+        setLoginStatus(true);
+
         setAlert({
           type: "success",
-          message: "Registration successful! You will be redirected to the login page",
+          message:
+            "Registration successful! You will be redirected to the login page.",
         });
-        setForm({
-          username: "",
-          email: "",
-          password: "",
-        });
-
-        localStorage.setItem("token", data.token);
 
         setTimeout(() => {
           router.push("/");

@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InputSearch from "@/components/layout/navbar/inputSearch";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Modal from "react-modal";
 import axios from "axios";
 import useAuthStore from "@/libs/globalState";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AuthCms from "@/components/view/cms/auth";
 
 export default function Navbar() {
@@ -18,20 +18,41 @@ export default function Navbar() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoggedIn, setLoginStatus } = useAuthStore();
+  const { isLoggedIn, token, setLoginStatus, setToken } = useAuthStore();
+
+  const modalRef = useRef(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
       setLoginStatus(true);
     }
-  }, [setLoginStatus]);
+  }, [setLoginStatus, setToken]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const openCmsModal = () => setIsCmsModalOpen(true);
   const closeCmsModal = () => setIsCmsModalOpen(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isModalOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,30 +68,34 @@ export default function Navbar() {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.accessToken);
+        setToken(response.data.accessToken);
         setLoginStatus(true);
-        toast.success("Login Success!"); // Pesan toast berhasil
+        toast.success("Login Success!");
         closeModal();
         setTimeout(() => {
-          window.location.href = '/'; // Mengarahkan ke halaman utama
+          window.location.href = "/";
         }, 1000);
-        
       }
     } catch (error) {
       console.error(
         "Login Failed:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Login Failed: " + (error.response ? error.response.data.message : error.message)); 
+      toast.error(
+        "Login Failed: " +
+          (error.response ? error.response.data.message : error.message)
+      );
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setToken(null);
     setLoginStatus(false);
     toast.info("Logged out successfully.");
     closeModal();
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = "/";
     }, 1000);
   };
 
@@ -89,7 +114,7 @@ export default function Navbar() {
         <div className="flex sm:flex-row justify-between items-center md:items-center gap-3">
           {!isLoggedIn ? (
             <>
-              <Link href={'/auth/register'}>
+              <Link href={"/auth/register"}>
                 <Button className="focus:outline-none text-primaryColor bg-secondaryColor hover:bg-primaryColor hover:text-white rounded-lg h-10 md:w-32 w-40">
                   Register
                 </Button>
@@ -130,7 +155,10 @@ export default function Navbar() {
                   onClick={() => setIsModalOpen(!isModalOpen)}
                 />
                 {isModalOpen && (
-                  <div className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32">
+                  <div
+                    ref={modalRef}
+                    className="absolute mt-2 w-40 bg-white border rounded-lg shadow-lg right-32"
+                  >
                     <Link href="/user-profile">
                       <Button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex">
                         Edit Profile
@@ -141,8 +169,8 @@ export default function Navbar() {
                         Order List
                       </Button>
                     </Link>
-                    <Button 
-                      onClick={openCmsModal} // Use openCmsModal here
+                    <Button
+                      onClick={openCmsModal}
                       className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex"
                     >
                       CMS dashboard
@@ -229,7 +257,7 @@ export default function Navbar() {
         </form>
       </Modal>
       <AuthCms isOpen={isCmsModalOpen} onClose={closeCmsModal} />
-      <ToastContainer /> {/* Pastikan ini ada dan ditampilkan */}
+      <ToastContainer />
     </header>
   );
 }
