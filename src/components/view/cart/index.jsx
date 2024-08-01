@@ -12,6 +12,7 @@ import { getWarehouse } from "@/modules/fetch/fetchUserWarehouse";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState, useRef } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
 
 const CartView = () => {
   const [productItems, setProductItems] = useState([]);
@@ -20,7 +21,7 @@ const CartView = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [cart, setCart] = useState({});
-  const [warehouseCityId, setWarehouseCityId] = useState(null); // hanya menyimpan city_id dari warehouse
+  const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [selectedCourier, setSelectedCourier] = useState(null);
   const [shippingCostData, setShippingCostData] = useState([]);
   const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
@@ -106,7 +107,7 @@ const CartView = () => {
   const handleDelete = async () => {
     try {
       await deleteCartItem(selectedProductId);
-      alert("Product deleted successfully");
+      toast.success("Product deleted successfully")
       handleModalClose();
       const data = await getCart(userId);
       setProductItems(data.data.cart_items);
@@ -167,7 +168,7 @@ const CartView = () => {
         console.error("Failed to update cart:", error.message);
       }
     } else {
-      alert("Cart ID is not available");
+      toast.error("Cart ID is not available");
     }
   };
 
@@ -320,6 +321,7 @@ const CartView = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

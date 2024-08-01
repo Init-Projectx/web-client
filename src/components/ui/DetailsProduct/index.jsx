@@ -1,16 +1,17 @@
 "use client";
 
-import { getProductCategory } from "@/modules/fetch/fetchUserProduct";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import idrConverter from "@/libs/idrConvert";
 import CardProduct from "../CardProduct";
 import Link from "next/link";
-import idrConverter from "@/libs/idrConvert";
+import { getProductCategory } from "@/modules/fetch/fetchUserProduct";
 
-const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
+const DetailsProduct = ({ product, onAddToCart }) => {
   const [productCategory, setProductCategory] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -33,6 +34,19 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
   }, [product]);
 
   const isOutOfStock = product.Product_Warehouses.length === 0;
+  const stock =
+    product.Product_Warehouses.length > 0
+      ? product.Product_Warehouses[0].stock
+      : 0;
+
+  const handleQuantityChange = (value) => {
+    setQuantity((prevQuantity) => {
+      const newQuantity = prevQuantity + value;
+      if (newQuantity > stock) return stock;
+      if (newQuantity < 1) return 1;
+      return newQuantity;
+    });
+  };
 
   return (
     <div className="px-12 mb-12">
@@ -55,11 +69,11 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
             <span className="font-semibold">Stock </span>
             <span className="font-bold">
-              {isOutOfStock ? "Habis" : product.Product_Warehouses[0].stock}
+              {isOutOfStock ? "Out of Stock" : stock}
             </span>
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold">Harga </span>
+            <span className="font-semibold">Price </span>
             <span className="font-bold">{idrConverter(product.price)}</span>
           </div>
           <div className="mb-4 grid grid-cols-2 ml-8 text-center">
@@ -72,9 +86,31 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
               {product.Product_Warehouses[0].warehouse.name}
             </span>
           </div>
-          <div className="mb-12 grid grid-cols-2 ml-8 text-center">
-            <span className="font-semibold">Description Product </span>
+          <div className="mb-4 grid grid-cols-2 ml-8 text-center">
+            <span className="font-semibold">Description </span>
             <span className="font-bold">{product.description}</span>
+          </div>
+          <div className="mb-12 grid grid-cols-2 ml-8 text-center">
+            <div>
+              <span className="font-semibold">Quantity</span>
+            </div>
+            <div>
+              <button
+                onClick={() => handleQuantityChange(-1)}
+                className="px-4 py-2 border rounded-l-md bg-gray-200"
+                disabled={quantity <= 1 || isOutOfStock}
+              >
+                -
+              </button>
+              <span className="px-4 py-2 border-t border-b">{quantity}</span>
+              <button
+                onClick={() => handleQuantityChange(1)}
+                className="px-4 py-2 border rounded-r-md bg-gray-200"
+                disabled={quantity >= stock || isOutOfStock}
+              >
+                +
+              </button>
+            </div>
           </div>
           <div className="flex gap-4">
             <button
@@ -83,10 +119,10 @@ const DetailsProduct = ({ product, onAddToCart, onBuyNow }) => {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-yellow-500 hover:bg-yellow-600 text-white"
               }`}
-              onClick={onAddToCart}
+              onClick={() => onAddToCart(quantity)}
               disabled={isOutOfStock}
             >
-              +Add to Cart
+              + Add to Cart
             </button>
           </div>
         </div>
