@@ -8,10 +8,11 @@ import {
   shippingCost,
   updateCart,
 } from "@/modules/fetch/fetchUserCart";
-import { getAllWarehouse } from "@/modules/fetch/fetchUserWarehouse";
+import { getWarehouse } from "@/modules/fetch/fetchUserWarehouse";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState, useRef } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
 
 const CartView = () => {
   const [productItems, setProductItems] = useState([]);
@@ -19,14 +20,79 @@ const CartView = () => {
   const [userData, setUserData] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [cart, setCart] = useState([]);
-  const [warehouse, setWarehouse] = useState([]);
-  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+  const [cart, setCart] = useState({});
+  const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [selectedCourier, setSelectedCourier] = useState(null);
   const [shippingCostData, setShippingCostData] = useState([]);
   const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
   const [totalCost, setTotalCost] = useState(0);
+  const [weight, setWeight] = useState(null);
   const modalRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token);
+          const userId = decodedToken.id;
+          const userData = await getUser(userId);
+          setUserData(userData.data);
+          setUserId(userId);
+
+          const cartData = await getCart(userId);
+          setCart(cartData.data);
+          setProductItems(cartData.data.cart_items);
+
+          const warehouseId = cartData.data.warehouse_id;
+          const warehouseData = await getWarehouse(warehouseId);
+          const origin = warehouseData.data;
+          setWarehouseCityId(origin);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchShippingCost = async () => {
+      if (selectedCourier && userData?.city_id) {
+        const weight = productItems.reduce(
+          (acc, item) => acc + item.product.weight * item.quantity,
+          0
+        );
+
+        setWeight(weight);
+
+        try {
+          const data = {
+            origin_id: warehouseCityId?.cityId,
+            destination_id: userData.city_id,
+            weight: weight,
+            courier: selectedCourier,
+          };
+
+          const shipping = await shippingCost(data);
+          setShippingCostData(shipping.data);
+        } catch (error) {
+          console.error(error.message);
+        }
+      }
+    };
+
+    if (selectedCourier) {
+      fetchShippingCost();
+    }
+  }, [selectedCourier]);
+
+  useEffect(() => {
+    if (isModalVisible && modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, [isModalVisible]);
 
   const handleTrashClick = (productId) => {
     setSelectedProductId(productId);
@@ -41,95 +107,20 @@ const CartView = () => {
   const handleDelete = async () => {
     try {
       await deleteCartItem(selectedProductId);
-      alert("Product deleted successfully");
+      toast.success("Product deleted successfully")
       handleModalClose();
       const data = await getCart(userId);
       setProductItems(data.data.cart_items);
-      window.location.reload();
     } catch (error) {
       console.error("Failed to delete product:", error.message);
     }
   };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const decodedToken = jwtDecode(token);
-          const getUserId = decodedToken.id;
-          const userData = await getUser(getUserId);
-          setUserData(userData.data);
-          setUserId(getUserId);
-        } catch (err) {
-          console.error(err.message);
-        }
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (userId) {
-        try {
-          const data = await getCart(userId);
-          setCart(data.data);
-          setProductItems(data.data.cart_items);
-        } catch (error) {
-          console.error(error.message);
-        }
-      }
-    };
-    fetchCart();
-  }, [userId]);
-
-  useEffect(() => {
-    const fetchWarehouse = async () => {
-      try {
-        const data = await getAllWarehouse();
-        setWarehouse(data.data);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-    fetchWarehouse();
-  }, []);
 
   const calculateTotalProductCost = () => {
     return productItems.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
       0
     );
-  };
-
-  const weight = productItems.reduce(
-    (acc, item) => acc + item.product.weight * item.quantity,
-    0
-  );
-
-  useEffect(() => {
-    const fetchShippingCost = async () => {
-      if (selectedWarehouse && selectedCourier && weight && userData?.city_id) {
-        try {
-          const data = await shippingCost({
-            origin_id: parseInt(selectedWarehouse),
-            destination_id: userData.city_id,
-            weight: weight,
-            courier: selectedCourier,
-          });
-          setShippingCostData(data.data);
-        } catch (error) {
-          console.error(error.message);
-        }
-      }
-    };
-    fetchShippingCost();
-  }, [selectedWarehouse, selectedCourier, weight, userData?.city_id]);
-
-  const handleWarehouseChange = (e) => {
-    const warehouseId = e.target.value;
-    setSelectedWarehouse(warehouseId);
   };
 
   const handleCourierChange = (e) => {
@@ -150,12 +141,6 @@ const CartView = () => {
     }
   };
 
-  useEffect(() => {
-    if (isModalVisible && modalRef.current) {
-      modalRef.current.focus();
-    }
-  }, [isModalVisible]);
-
   const handleCheckout = async () => {
     if (cart.id) {
       try {
@@ -164,13 +149,14 @@ const CartView = () => {
             (item) => item.service === selectedShippingMethod
           )?.cost[0]?.value || 0;
 
-        const updateCartData = await updateCart(cart.id, {
+        await updateCart(cart.id, {
           shipping_method: selectedShippingMethod,
           shipping_cost: shippingCostValue,
-          warehouse_id: parseInt(selectedWarehouse),
+          warehouse_id: cart.warehouse_id,
           courier: selectedCourier,
           total_price: calculateTotalProductCost(),
           net_price: calculateTotalProductCost() + shippingCostValue,
+          total_weight: weight,
           cart_items_attr: productItems.map((item) => ({
             product_id: item.product.id,
             quantity: item.quantity,
@@ -182,7 +168,7 @@ const CartView = () => {
         console.error("Failed to update cart:", error.message);
       }
     } else {
-      alert("Cart ID is not available");
+      toast.error("Cart ID is not available");
     }
   };
 
@@ -250,22 +236,8 @@ const CartView = () => {
                   <p className="mb-1 mt-2">{items.product.name}</p>
                   <p className="mb-1 mt-2 pl-7">x{items.quantity}</p>
                 </div>
-              ))}{" "}
+              ))}
               <hr className="mt-2" />
-              <div className="px-8 mt-3">
-                <span className="font-bold">Warehouse</span>
-                <select
-                  className="w-full mt-2 border border-gray-300 h-7"
-                  onChange={handleWarehouseChange}
-                >
-                  <option value="">Select Warehouse</option>
-                  {warehouse.map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div className="px-8 mt-3">
                 <span className="font-bold">Courier</span>
                 <select
@@ -281,20 +253,28 @@ const CartView = () => {
                 </select>
               </div>
               <div className="px-8 mt-3">
-                <span className="font-bold">Shipping Method</span>
+                <span className="font-bold focus:outline-none">
+                  Shipping Method
+                </span>
                 <select
-                  className="w-full mt-2 border border-gray-300 h-7"
+                  className="w-full mt-2 border border-gray-300 h-7 focus:outline-none"
                   onChange={handleShippingMethodChange}
                 >
-                  <option value="">Select Shipping Method</option>
+                  <option value="" className="focus:outline-none">
+                    Select Shipping Method
+                  </option>
                   {shippingCostData?.map((method, index) => (
-                    <option key={index} value={method.service}>
+                    <option
+                      className="focus:outline-none"
+                      key={index}
+                      value={method.service}
+                    >
                       {method.description} -{" "}
                       {idrConverter(method.cost[0]?.value || 0)}
                     </option>
                   ))}
                 </select>
-              </div>{" "}
+              </div>
               <hr className="mt-2 mb-2" />
               <div className="px-8 mt-3 grid grid-cols-2">
                 <span className="font-bold">Total</span>
@@ -341,6 +321,7 @@ const CartView = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };
