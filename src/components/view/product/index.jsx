@@ -6,6 +6,7 @@ import { getUser } from "@/modules/fetch/fetchUser";
 import { getCart, updateCart } from "@/modules/fetch/fetchUserCart";
 import { getProduct } from "@/modules/fetch/fetchUserProduct";
 import DetailsProduct from "@/components/ui/DetailsProduct";
+import { toast, ToastContainer } from "react-toastify"; 
 
 const DetailsProductPage = ({ slug }) => {
   const [cart, setCart] = useState(null);
@@ -49,7 +50,7 @@ const DetailsProductPage = ({ slug }) => {
     }
   }, [slug]);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (quantity) => {
     if (!product || !cart) return;
 
     try {
@@ -82,9 +83,10 @@ const DetailsProductPage = ({ slug }) => {
       });
 
       setCart(newCart);
-      alert(`Product ${product.name} added to cart`);
+      toast.success(`Product ${product.name} added to cart`); 
     } catch (error) {
       console.error("Failed to add to cart:", error);
+      toast.error("Failed to add to cart"); 
     }
   };
 
@@ -97,12 +99,15 @@ const DetailsProductPage = ({ slug }) => {
   }
 
   return (
-    <DetailsProduct
-      product={product}
-      cartData={cart}
-      quantity={quantity}
-      onAddToCart={handleAddToCart}
-    />
+    <>
+      <DetailsProduct
+        product={product}
+        cartData={cart}
+        quantity={quantity}
+        onAddToCart={handleAddToCart}
+      />
+      <ToastContainer /> 
+    </>
   );
 };
 
