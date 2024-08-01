@@ -4,12 +4,10 @@ import Link from "next/link";
 import CmsOrder from "@/components/view/cms/confirmation";
 
 const LayoutOrder = () => {
-  
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>');
   return (
     <>
       <div className="h-full flex flex-row">
-        <div className="w-1/5 h-6/6 flex flex-col shadow-lg px-3 text-sm font-bold">
+        <div className="w-1/5 h-6/6 flex flex-col border px-3 text-sm font-bold py-5">
           <Link href={"/"}>
             <button className="w-full mt-10 flex items-center rounded-md hover:bg-gray-200">
               <img
@@ -60,10 +58,12 @@ const LayoutOrder = () => {
           </Link>
         </div>
         <div className="w-full">
-          <CmsOrder/>
-          <CmsOrder/>
-          <CmsOrder/>
-          <CmsOrder/>
+          <div className="w-5/6 h-10 rounded-lg bg-yellow-400 flex items-center grid grid-cols-4 shadow mt-5 mx-auto">
+            <p className="ms-3">Username</p>
+            <p className="ms-3">Product name</p>
+            <p className="ml-12">Status</p>
+            <p className="ms-32">Action</p>
+          </div>
           <CmsOrder/>
         </div>
       </div>

@@ -28,14 +28,14 @@ const CmsOrder = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await userData(); // Ensure userData is fetched before proceeding
+        await userData();
 
-        // Use a delay to ensure userData is fully set
         setTimeout(async () => {
           try {
             const data = await findAll();
             const newData = data.data.filter(
-              (order) => order.proof_of_payment === "Waiting Payment"
+              (order) =>
+                order.proof_of_payment === "Waiting Payment"
             );
             if (newData.length > 0) {
               setOrders(newData);
@@ -45,10 +45,10 @@ const CmsOrder = () => {
           } finally {
             setLoading(false);
           }
-        }, 500); // Adjust delay if necessary
+        }, 500);
       } catch (error) {
         console.error("Error during data fetching", error.message);
-        setLoading(false); // Ensure loading is stopped on error
+        setLoading(false);
       }
     };
     fetchData();
@@ -56,8 +56,13 @@ const CmsOrder = () => {
 
   const handleReject = async (orderId) => {
     try {
-      await updateStatus(orderId, { status: "canceled" });
-      setOrders((prevOrders) => prevOrders.filter(order => order.id !== orderId));
+      console.log("hello world");
+      const response = await updateStatus(orderId, { status: "cancelled" });
+      console.log(response);
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order.id !== orderId)
+      );
+      window.location.reload();
     } catch (error) {
       console.log("Error updating status", error.message);
     }
@@ -70,13 +75,13 @@ const CmsOrder = () => {
         proof_of_payment: "payment success",
       };
       await updateStatus(orderId, data);
-      setOrders((prevOrders) => prevOrders.filter(order => order.id !== orderId));
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order.id !== orderId)
+      );
     } catch (error) {
       console.log("Error updating status", error.message);
     }
   };
-
-  console.log('>>>>>>>>>>>>', orders);
 
   return (
     <div className="flex justify-center">
@@ -85,51 +90,81 @@ const CmsOrder = () => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="w-full flex flex-col my-1">
+        <div className="w-full flex flex-col my-4">
           {orders.length > 0 ? (
             orders.map((items) => (
-              <div key={items.id} className="w-5/6 border-2 border-slate-950 rounded-lg h-[4rem] flex items-center justify-evenly mx-auto my-3">
+              <div
+                key={items.id}
+                className="w-5/6 border shadow rounded-lg h-[4rem] flex items-center justify-evenly mx-auto my-3"
+              >
                 <div className="grid grid-cols-4 gap-[100px]">
                   <div>
                     <p>{user ? user.username : "Loading..."}</p>
                   </div>
                   <div>
                     {items.order_products.map((item) => (
-                      <p key={item.id}>
-                        {item.product.name}
-                      </p>
+                      <p key={item.id}>{item.product.name}</p>
                     ))}
                   </div>
                   <div>
                     <p>{items.status}</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <button
-                        type="button"
-                        className="w-[5rem] h-[1.5rem] bg-yellow-200 rounded-md hover:bg-yellow-300"
-                        onClick={() => handleReject(items.id)}
-                      >
-                        <p className="text-amber-600 h-[1.5rem] rounded-md">
-                          reject
-                        </p>
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        className="w-[5rem] h-[1.5rem] bg-yellow-500 text-white rounded-md hover:bg-yellow-300"
-                        onClick={() => handleApprove(items.id)}
-                      >
-                        <p className="h-[1.5rem] rounded-md">approve</p>
-                      </button>
-                    </div>
+                  <div>
+                    {items.status === "cancelled" ? (
+                      <div className="grid grid-cols-2 gap-5">
+                        <div>
+                          <button
+                            type="button"
+                            className="w-[5rem] h-[1.5rem] bg-yellow-200 rounded-md opacity-50"
+                            onClick={() => handleReject(items.id)}
+                            disabled
+                          >
+                            <p className="text-amber-600 h-[1.5rem] rounded-md">
+                              reject
+                            </p>
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            className="w-[5rem] h-[1.5rem] bg-yellow-500 text-white rounded-md opacity-50"
+                            onClick={() => handleApprove(items.id)}
+                            disabled
+                          >
+                            <p className="h-[1.5rem] rounded-md">approve</p>
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-5">
+                        <div>
+                          <button
+                            type="button"
+                            className="w-[5rem] h-[1.5rem] bg-yellow-200 rounded-md hover:bg-yellow-300"
+                            onClick={() => handleReject(items.id)}
+                          >
+                            <p className="text-amber-600 h-[1.5rem] rounded-md">
+                              reject
+                            </p>
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            className="w-[5rem] h-[1.5rem] bg-yellow-500 text-white rounded-md hover:bg-yellow-300"
+                            onClick={() => handleApprove(items.id)}
+                          >
+                            <p className="h-[1.5rem] rounded-md">approve</p>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <p>No orders found.</p>
+            <p className="text-center">No orders found.</p>
           )}
         </div>
       )}
@@ -137,4 +172,4 @@ const CmsOrder = () => {
   );
 };
 
-export default React.memo(CmsOrder);
+export default CmsOrder;
