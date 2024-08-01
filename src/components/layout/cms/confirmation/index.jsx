@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import CmsOrder from "@/components/view/cms/order";
+import CmsOrder from "@/components/view/cms/confirmation";
 
 const LayoutOrder = () => {
   
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>');
   return (
     <>
       <div className="h-full flex flex-row">

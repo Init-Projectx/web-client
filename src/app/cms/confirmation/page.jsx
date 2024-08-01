@@ -1,4 +1,4 @@
-import WaitPayment from "@/components/layout/cms/orders";
+import WaitPayment from "@/components/layout/cms/confirmation";
 
 const WaitingPayment = () => {
     return(
