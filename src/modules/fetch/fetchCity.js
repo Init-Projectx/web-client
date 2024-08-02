@@ -22,7 +22,7 @@ const findCities = async (page, pageSize = 5) => {
 
 const searchCities = async (query) => {
     try {
-        const response = await userInstance.get(`/cities?query=${query}`);
+        const response = await userInstance.get(`/cities/search?query=${query}`);
         return response.data;
     } catch (error) {
         console.log('Error search cities', error.message);

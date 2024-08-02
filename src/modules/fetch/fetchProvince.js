@@ -2,7 +2,7 @@ const { userInstance } = require("@/libs/axios/axiosInstance");
 
 const searchProvince = async (query) => {
     try {
-        const response = await userInstance.get(`/provinces?query=${query}`);
+        const response = await userInstance.get(`/provinces/search?query=${query}`);
         return response.data;
     } catch (error) {
         console.log('Error search province', error.message);
