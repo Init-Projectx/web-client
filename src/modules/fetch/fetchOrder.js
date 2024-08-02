@@ -58,11 +58,21 @@ const updateStatus = async (id, data) => {
     }
 }
 
+const notification = async (to) => {
+    try {
+        const response = await userInstance.post('/orders/notification', to);
+        return response.data;
+    } catch (error) {
+        console.log('Failed to send notification', error.response ? error.response.data : error.message);
+    }
+}
+
 export {
     findAll,
     findOne,
     createOrder,
     updateStatus,
     payment,
-    midtrans
+    midtrans,
+    notification
 }

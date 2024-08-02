@@ -34,7 +34,6 @@ const CheckoutView = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      console.log("Fetching cart data for user ID:", user.id);
       const fetchCart = async () => {
         try {
           const data = await getCart(user.id);

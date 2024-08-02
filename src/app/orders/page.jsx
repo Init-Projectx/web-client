@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { midtrans } from "@/modules/fetch/fetchOrder";
+import { midtrans, notification } from "@/modules/fetch/fetchOrder";
 import { resetCart } from "@/modules/fetch/fetchUserCart";
 import { findAll, updateStatus } from "@/modules/fetch/fetchOrder";
 import LoadingSpinner from "@/components/ui/LoadingSpinner/index.jsx";
 import Link from "next/link.js";
 import Payment from "@/components/view/checkout/payment";
+import { jwtDecode } from "jwt-decode";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -23,6 +24,9 @@ const Orders = () => {
         const transaction_status = urlParams.get("transaction_status");
         const status_code = urlParams.get("status_code");
 
+        const token = localStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+
         if (order_id && transaction_status) {
           try {
             const response = await midtrans({
@@ -30,9 +34,20 @@ const Orders = () => {
               transaction_status,
               status_code,
             });
-            if (response.data && response.data.user_id) {
-              const userId = response.data.user_id;
-              await resetCart(userId);
+
+            if (response.data.proof_of_payment === "payment success") {
+              try {
+                const email = {
+                  to: decodedToken.email,
+                };
+                const sendNotification = await notification(email);
+                if (sendNotification) {
+                  console.log("Send Notification Success");
+                }
+                await resetCart(decodedToken.id);
+              } catch (error) {
+                alert("Ada yang error disini", error.message);
+              }
             } else {
               setError("Invalid Midtrans response data.");
               return;
@@ -158,10 +173,11 @@ const Orders = () => {
                         Delivered
                       </button>
                     ) : !updatedOrders.has(order.id) ? (
-                      // <button className="flex items-center justify-center px-4 py-2 bg-yellow-500 h-8 hover:bg-yellow-600 text-white rounded">
-                      //   Select Payment
-                      // </button>
-                      <Payment className={'flex items-center justify-center px-4 py-2 bg-yellow-500 h-8 w-36 hover:bg-yellow-600 text-white rounded'} />
+                      <Payment
+                        className={
+                          "flex items-center justify-center px-4 py-2 bg-yellow-500 h-8 w-36 hover:bg-yellow-600 text-white rounded"
+                        }
+                      />
                     ) : (
                       <span className="text-green-500">Done</span>
                     )}
