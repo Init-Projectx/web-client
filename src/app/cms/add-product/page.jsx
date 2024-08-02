@@ -5,6 +5,7 @@ import Input from "@/components/ui/Input";
 import FileUpload from "@/components/ui/FileUpload";
 import Button from "@/components/ui/Button";
 import { addProductCms } from "@/modules/fetch/cms/fetchProductCms";
+import Link from "next/link";
 
 const AddProductPage = () => {
   const [productData, setProductData] = useState({
@@ -14,8 +15,8 @@ const AddProductPage = () => {
     sku: "",
     description: "",
     category: "",
-    category_id: "",  // Tambahkan category_id di sini
-    stock: ""
+    category_id: "",
+    stock: "",
   });
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
@@ -25,7 +26,7 @@ const AddProductPage = () => {
     const { name, value } = e.target;
     setProductData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -41,8 +42,8 @@ const AddProductPage = () => {
       sku: "",
       description: "",
       category: "",
-      category_id: "",  // Reset category_id juga
-      stock: ""
+      category_id: "",
+      stock: "",
     });
     setFile(null);
     setError(null);
@@ -63,7 +64,7 @@ const AddProductPage = () => {
       const response = await addProductCms(formData);
       setSuccessMessage("Product added successfully!");
       setError(null);
-      handleCancel(); // Reset form after successful submission
+      handleCancel();
     } catch (error) {
       setError("Error adding product. Please try again.");
       setSuccessMessage(null);
@@ -71,11 +72,63 @@ const AddProductPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md mt-8">
-        <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
+    <div className="flex">
+      <div className="w-1/5 h-screen flex flex-col border px-3 py-5 bg-white fixed">
+        <Link href={"/"}>
+          <button className="w-full mt-10 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449701/dashboard.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            User Dashboard
+          </button>
+        </Link>
+        <Link href={"/cms/add-product"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449762/gift.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            Add Product
+          </button>
+        </Link>
+        <Link href={"/cms/confirmation"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449846/money-bill.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            <p>Payment</p>
+          </button>
+        </Link>
+        <Link href={"/cms/orders"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449902/shopping-cart.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            Orders
+          </button>
+        </Link>
+      </div>
+      <div className="flex-1 ml-1/5 px-32 pl-[400px] bg-white mt-8">
+        <h2 className="text-2xl font-bold mb-10 text-center">Add New Product</h2>
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        {successMessage && <div className="text-green-500 mb-4">{successMessage}</div>}
+        {successMessage && (
+          <div className="text-green-500 mb-4">{successMessage}</div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Input
@@ -107,7 +160,7 @@ const AddProductPage = () => {
               className="w-full"
             />
             <Input
-              label="Category ID"  // Tambahkan input untuk category_id
+              label="Category ID"
               name="category_id"
               value={productData.category_id}
               onChange={handleInputChange}
