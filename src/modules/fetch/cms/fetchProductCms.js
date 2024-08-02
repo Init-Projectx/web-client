@@ -29,7 +29,8 @@ const addProductCms = async (data) => {
         } );
         return response.data;
     } catch (error) {
-        console.log('Error add new product', error.message)
+        console.log('Error add new product', error.message);
+        throw error;
     }
 }
 

@@ -21,6 +21,7 @@ const findCities = async (page, pageSize = 5) => {
 };
 
 const searchCities = async (query) => {
+    console.log(query, ">>>>>>>>>>>>>>>>>>>>>>");
     try {
         const response = await userInstance.get(`/cities/search?query=${query}`);
         return response.data;
