@@ -11,6 +11,7 @@ import {
   activatedProduct,
 } from "@/modules/fetch/cms/fetchProductCms";
 import { useDropzone } from "react-dropzone";
+import { ToastContainer, toast } from "react-toastify";
 
 const CardProductCms = ({ product }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -57,7 +58,7 @@ const CardProductCms = ({ product }) => {
 
       await editProductCms(product.slug, formData);
       setIsEditModalVisible(false);
-      alert("Edit product success");
+      toast.success("Edit product success");
       window.location.reload();
     } catch (error) {
       console.log("Failed to edit product", error.message);
@@ -68,7 +69,7 @@ const CardProductCms = ({ product }) => {
     try {
       const data = await deleteProductCms(product.slug);
       setIsModalVisible(false);
-      alert("Delete product success");
+      toast.success("Delete product success");
       window.location.reload();
     } catch (error) {
       console.log("Failed to delete product", error.message);
@@ -78,7 +79,7 @@ const CardProductCms = ({ product }) => {
   const hanldeActivated = async () => {
     try {
       const activated = await activatedProduct(product.slug);
-      alert("Activated product success");
+      toast.success("Activated product success");
       window.location.reload();
     } catch (error) {
       console.log("Failed to activated product", error.message);
@@ -235,6 +236,7 @@ const CardProductCms = ({ product }) => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };
