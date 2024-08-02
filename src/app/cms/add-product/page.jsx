@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Select from "react-select";
 import Input from "@/components/ui/Input";
 import FileUpload from "@/components/ui/FileUpload";
 import Button from "@/components/ui/Button";
 import { addProductCms } from "@/modules/fetch/cms/fetchProductCms";
+import Link from "next/link";
 import { searchCities } from "@/modules/fetch/fetchCity";
 import { getAllCategories } from "@/modules/fetch/fetchCategories";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+import Select from "react-select";
 
 const AddProductPage = () => {
   const [productData, setProductData] = useState({
@@ -35,27 +36,29 @@ const AddProductPage = () => {
       try {
         const cityResponse = await searchCities(searchQuery);
         if (Array.isArray(cityResponse)) {
-          const cityOptions = cityResponse.map(city => ({
+          const cityOptions = cityResponse.map((city) => ({
             value: city.name,
             label: city.name,
           }));
           setCity(cityOptions);
         } else {
-          throw new Error("Invalid response format for cities");
+          setCity([]);
         }
 
         const categoryResponse = await getAllCategories();
         if (Array.isArray(categoryResponse.data)) {
-          const categoryOptions = categoryResponse.data.map(category => ({
+          const categoryOptions = categoryResponse.data.map((category) => ({
             value: category.id,
             label: category.name,
           }));
           setCategories(categoryOptions);
         } else {
-          throw new Error("Invalid response format for categories");
+          setCategories([]);
         }
       } catch (error) {
-        console.log("Error fetching data:", error.message);
+        console.error("Error fetching data:", error.message);
+        setCity([]);
+        setCategories([]);
       }
     };
 
@@ -73,7 +76,7 @@ const AddProductPage = () => {
   const handleCityChange = (selectedOption) => {
     setProductData((prevData) => ({
       ...prevData,
-      city: selectedOption ? selectedOption.value : '',
+      city: selectedOption ? selectedOption.value : "",
     }));
   };
 
@@ -84,13 +87,15 @@ const AddProductPage = () => {
   const handleCategoryChange = (selectedOption) => {
     setProductData((prevData) => ({
       ...prevData,
-      category_id: selectedOption ? selectedOption.value : '',
-      category: selectedOption ? selectedOption.label : '',
+      category_id: selectedOption ? selectedOption.value : "",
+      category: selectedOption ? selectedOption.label : "",
     }));
   };
 
   const handleFileChange = (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    if (acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+    }
   };
 
   const handleCancel = () => {
@@ -134,10 +139,62 @@ const AddProductPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <ToastContainer />
-      <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md mt-8">
-        <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
+    <div className="flex">
+      <div className="w-1/5 h-screen flex flex-col border px-3 py-5 bg-white fixed">
+        <Link href={"/"}>
+          <button className="w-full mt-10 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449701/dashboard.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            User Dashboard
+          </button>
+        </Link>
+        <Link href={"/cms/add-product"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449762/gift.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            Add Product
+          </button>
+        </Link>
+        <Link href={"/cms/confirmation"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449846/money-bill.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            <p>Payment</p>
+          </button>
+        </Link>
+        <Link href={"/cms/orders"}>
+          <button className="w-full mt-7 flex items-center rounded-md hover:bg-gray-200">
+            <img
+              src="https://www.svgrepo.com/show/449902/shopping-cart.svg"
+              className="mx-5 my-1 poppins-bold"
+              alt=""
+              width="25px"
+              height="25px"
+            />
+            Orders
+          </button>
+        </Link>
+      </div>
+      <div className="flex-1 ml-1/5 px-32 pl-[400px] bg-white mt-8">
+        <h2 className="text-2xl font-bold mb-10 text-center">
+          Add New Product
+        </h2>
+        <ToastContainer />
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {successMessage && (
           <div className="text-green-500 mb-4">{successMessage}</div>
@@ -189,9 +246,7 @@ const AddProductPage = () => {
               <label>City</label>
               <Select
                 options={city}
-                value={city.find(
-                  (option) => option.value === productData.city
-                )}
+                value={city.find((option) => option.value === productData.city)}
                 onChange={handleCityChange}
                 onInputChange={handleCityInputChange}
                 className="w-full mt-1"
@@ -199,6 +254,8 @@ const AddProductPage = () => {
                 isSearchable
               />
             </div>
+          </div>
+          <div className="w-full">
             <Input
               label="Description"
               name="description"
@@ -208,7 +265,7 @@ const AddProductPage = () => {
             />
           </div>
           <div className="flex flex-col items-center mb-6">
-            <FileUpload onDrop={handleFileChange} />
+            <FileUpload onDrop={handleFileChange} className={"w-full"} />
           </div>
           <div className="flex justify-evenly px-40">
             <Button

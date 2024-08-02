@@ -95,7 +95,7 @@ const CmsOrder = () => {
             orders.map((items) => (
               <div
                 key={items.id}
-                className="w-5/6 border shadow rounded-lg h-[4rem] flex items-center justify-evenly mx-auto my-3"
+                className="border shadow rounded-lg h-[4rem] flex items-center justify-evenly mx-auto py-5 px-5"
               >
                 <div className="grid grid-cols-4 gap-[100px]">
                   <div>
