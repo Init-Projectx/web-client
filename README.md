@@ -1,10 +1,96 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## MiniMiracle Frontend
+Welcome to the frontend client of MiniMiracle! This project serves as the user interface for our e-commerce platform, enabling users to interact with various features such as product browsing, cart management, and checkout. The frontend is built using the Next.js app router and integrates the Midtrans Snap Pop Up for payment processing. Key user features include viewing product lists, filtering by category, managing the cart, checking out, viewing shipping costs, and making payments.
+
+Project Structure
+web-client/
+├── .next/
+├── node_modules/
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── auth/
+│   │   ├── carts/
+│   │   ├── checkout/
+│   │   ├── cms/
+│   │   │   ├── add-product/
+│   │   │   │   └── page.jsx
+│   │   │   ├── dashboard/
+│   │   │   ├── orders/
+│   │   ├── orders/
+│   │   ├── payment/
+│   │   ├── product/
+│   │   │   ├── [slug]/
+│   │   │   ├── categories/
+│   │   ├── user-profile/
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.js
+│   │   ├── page.js
+├── assets/
+├── components/
+│   ├── layout/
+│   │   ├── authlayout/
+│   │   ├── checkout/
+│   │   ├── cms/
+│   │   ├── footer/
+│   │   ├── hero/
+│   │   ├── navbar/
+│   │   ├── profile/
+│   ├── ui/
+│   │   ├── Button/
+│   │   ├── ButtonQuantity/
+│   │   ├── Card/
+│   │   ├── CardCategory/
+│   │   ├── CardProduct/
+│   │   ├── cardProductC/
+│   │   ├── DetailsProduct/
+│   │   ├── Dropdown/
+│   │   ├── FileUpload/
+│   │   │   └── index.jsx
+│   │   ├── Form/
+│   │   ├── Input/
+│   │   ├── LoadingSpinner/
+│   │   ├── Modal/
+├── modules/
+│   ├── fetch/
+│   │   ├── cms/
+│   │   │   ├── fetchProductCms.js
+│   │   │   ├── fetchOrderCms.js
+│   │   │   ├── fetchWarehouseCms.js
+│   │   │   ├── fetchCategoriesCms.js
+│   │   ├── fetchCity.js
+│   │   ├── fetchOrder.js
+│   │   ├── fetchProvince.js
+│   │   ├── fetchStock.js
+│   │   ├── fetchUser.js
+│   │   ├── fetchUserCart.js
+│   │   ├── fetchUserProduct.js
+│   │   ├── fetchUserWarehouse.js
+├── .eslintrc.json
+├── .gitignore
+├── jsconfig.json
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
 
 ## Getting Started
+Ensure you have the following installed on your machine:
+Prerequisites
+Node.js (version 14.x or higher)
+npm (version 6.x or higher)
 
-First, run the development server:
+## Installation
+1. Clone the repository:
+git clone https://github.com/Init-Projectx/Web-client.git
+cd web-client
 
-```bash
+2. Install dependencies:
+npm install
+
+3. Running the Development Server:
 npm run dev
 # or
 yarn dev
@@ -12,25 +98,67 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and navigate to http://localhost:3000 to view the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Using Docker
+If you prefer using Docker, follow these steps:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Build the Docker image:
+docker build -t minimiracle-frontend .
 
-## Learn More
+2. Run the Docker container:
+docker-compose up
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
+- Next.js: A React framework for server-rendered applications
+- Tailwind CSS: A utility-first CSS framework
+- Axios: Promise-based HTTP client for the browser and Node.js
+- Prisma ORM: Next-generation ORM for Node.js and TypeScript
+- Midtrans: Payment gateway integration using Snap Pop Up
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
+- Product Management: Allows admins to add, edit, delete, and activate products.
+- User Authentication: Secure user authentication using JWT.
+- Order Management: Users can view and manage their orders.
+- Payment Integration: Integrated with Midtrans for payment processing.
+- Shipping Costs: Uses RajaOngkir to fetch shipping cost information.
+- Email Notifications: Sends email notifications using NodeMailer.
+- Product Browsing: Users can view and filter products by category.
+- Cart and Checkout: Users can manage their cart, proceed to checkout, and make payments.
+- Shipping Costs: Users can view shipping costs during checkout.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Project Structure Details
+src/app/
+This directory contains the main application pages and routing configuration. It includes subdirectories for various sections of the application such as authentication, carts, checkout, CMS, orders, payment, and product management.
 
-## Deploy on Vercel
+components/
+This directory contains reusable UI components and layout components used throughout the application.
+- layout/: Contains components related to the layout of the application, such as the navbar, footer, and different page layouts.
+- ui/: Contains various UI components like buttons, cards, input fields, and file uploads.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+modules/fetch/
+This directory contains modules for handling data fetching from the backend API. It includes separate modules for fetching data related to CMS, orders, users, and other entities.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Configuration Files
+- .eslintrc.json: Configuration for ESLint, used for linting the codebase.
+- .gitignore: Specifies files and directories to be ignored by Git.
+- jsconfig.json: Configuration for JavaScript projects.
+- next.config.mjs: Configuration for the Next.js application.
+- package-lock.json & package.json: Defines the project's dependencies and scripts.
+- postcss.config.js: Configuration for PostCSS, used for processing CSS.
+- tailwind.config.js: Configuration for Tailwind CSS.
+
+## Contributing
+If you wish to contribute to this project, please follow these steps:
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Make your changes and commit them.
+4. Push your changes to your fork.
+5. Open a pull request to the main repository.
+Please do not merge the pull request until it has been reviewed and approved.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+Happy coding!
