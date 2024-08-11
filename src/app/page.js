@@ -10,6 +10,7 @@ import { getAllProducts } from "@/modules/fetch/fetchUserProduct";
 import { getAllCategories } from "@/modules/fetch/fetchCategories";
 import Link from "next/link";
 import CardProduct from "@/components/ui/CardProduct";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -44,6 +45,16 @@ export default function Home() {
     setCurrentPage(page);
   };
 
+  const handleProductClick = (slug) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      window.location.href = `/product/${slug}`;
+    } else {
+      toast.error('You Must Login First')
+    }
+  }
+
   return (
     <div className="flex flex-col md:px-24 px-10 py-[5.5rem]">
       <Head>
@@ -71,9 +82,13 @@ export default function Home() {
               <h3 className="font-bold text-color-dark">Product List</h3>
               <div className="product-list grid lg:grid-cols-5 md:grid-cols-5 sm:grid-cols-5 gap-6 mt-8 text-xs md:text-sm sm:text-sm">
                 {products.map((product) => (
-                  <Link href={`/product/${product.slug}`} key={product.id}>
+                  <div
+                    key={product.id}
+                    onClick={() => handleProductClick(product.slug)}
+                    className="cursor-pointer"
+                  >
                     <CardProduct product={product} />
-                  </Link>
+                  </div>
                 ))}
               </div>
               <Pagination
@@ -85,6 +100,7 @@ export default function Home() {
           </div>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 }
