@@ -83,7 +83,5 @@ If you wish to contribute to this project, please follow these steps:
 5. Open a pull request to the main repository.
 Please do not merge the pull request until it has been reviewed and approved.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
 
 Happy coding!
