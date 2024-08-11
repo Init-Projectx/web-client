@@ -46,7 +46,7 @@ const Orders = () => {
                 }
                 await resetCart(decodedToken.id);
               } catch (error) {
-                alert("Ada yang error disini", error.message);
+                console.log("Ada yang error disini", error.message);
               }
             } else {
               setError("Invalid Midtrans response data.");
